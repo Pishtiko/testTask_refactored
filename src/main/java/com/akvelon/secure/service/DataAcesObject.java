@@ -8,6 +8,8 @@ import com.akvelon.secure.entity.User;
 import com.akvelon.secure.util.HibernateUtil;
 import com.akvelon.secure.util.HibernateUtil_SecurityDb;
 import org.hibernate.SessionFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -21,13 +23,25 @@ import java.util.List;
 @Transactional
 public class DataAcesObject{
 
+    //HELPERS
+
+    @SuppressWarnings("unchecked")
+    @Transactional
+    public String getAuthenticatedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        System.out.println("User is " + username);
+        return username;
+    }
+
+
     @SuppressWarnings("unchecked")
     @Transactional
     public List<Product> getProds(String pop) {
         System.out.println("А здеся?");
         List<Product> prl = entityManager.createQuery("from Product order by "+pop).getResultList();
-        for (Product pp:prl
-             ) {
+        for ( Product pp : prl ) {
             System.out.println( pp.toString());
             System.out.println( pp.getProductName().toString());
         }
@@ -39,8 +53,8 @@ public class DataAcesObject{
     private EntityManager entityManager;
 
 
-    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    SessionFactory securityDbSessionFactory = HibernateUtil_SecurityDb.getSessionFactory();
+//    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+//    SessionFactory securityDbSessionFactory = HibernateUtil_SecurityDb.getSessionFactory();
 
     
     enum allowedPathParams {PRICE,ProductName}
@@ -60,13 +74,10 @@ public class DataAcesObject{
     public User getUserById(String userName)   // HAS ISSUE
     {
         User user = new User();
-
-        final String query = "FROM User WHERE user_name = :USERNAME";
+        final String query = "FROM User WHERE user_name = "+userName;
         user = (User) entityManager
                 .createQuery(query)
                 .getSingleResult();
-
-        
         return user;
         
     }
@@ -196,7 +207,7 @@ public class DataAcesObject{
     }
     //HELPER METHOD
     
-    boolean checkRequestHelper(String pathParam)
+    private boolean checkRequestHelper(String pathParam)
     {
         if ( allowedPathParams.valueOf(pathParam)!= null 
              && restrictedPathParams.valueOf(pathParam)==null)

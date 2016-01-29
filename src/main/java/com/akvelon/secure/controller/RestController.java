@@ -5,12 +5,20 @@ import com.akvelon.secure.entity.OrderModel;
 import com.akvelon.secure.entity.User;
 import com.akvelon.secure.service.DataAcesObject;
 import com.akvelon.secure.entity.Product;
+import com.akvelon.secure.service.UserService;
+import com.akvelon.secure.service.UserServiceImpl;
+import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -19,25 +27,51 @@ import java.util.List;
 @RequestMapping(value = "/service")
 public class RestController {
 
-
     @Autowired
     private DataAcesObject dao = new DataAcesObject();
 
-// Test Methods
+    @Autowired
+    HttpServletRequest request ;
 
-   @RequestMapping(value="createUser", method = RequestMethod.POST)
-   public boolean createUser(@RequestBody User user){
-       return dao.createUser(user);
-   }
+
+// Test Methods
+    @RequestMapping( value = "/kakashkina", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String createTestUser(){
+        User useryan = new User("kakashkin", "7110eda4d09e062aa5e4a390b0a572ac0d2c0220");
+        if(dao.createUser(useryan))
+            return "Нормалёк";
+        return "АйАйАй";
+    }
 
 
     @RequestMapping( value = "/tValenka", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-  public String tValenka() {
+    public String tValenka() {
         System.out.println("первый попал");
         return dao.getProds("price").toString();
     }
 
+    @RequestMapping( value = "/testMest}", method = RequestMethod.GET)
+    @ResponseBody
+    public String shnyagovit(@AuthenticationPrincipal UserServiceImpl customUser){
+        System.out.println("первый попал");
+        String name = dao.getAuthenticatedUser();
+        return name;
+    }
+
+    @RequestMapping( value = "/testShmest", method = RequestMethod.GET)
+    @ResponseBody
+    public String shnyag(@AuthenticationPrincipal User customUser){
+        return customUser.getLogin().toString();
+    }
+
+    // End Test Methods
+
+    @RequestMapping(value="createUser", method = RequestMethod.POST)
+    public boolean createUser(@RequestBody User user){
+       return dao.createUser(user);
+   }
 
 
     //<editor-fold defaultstate="collapsed" desc="COMMON METHODS(for MANAGER and CUSTOMER)">
