@@ -1,15 +1,16 @@
 
 package com.akvelon.secure.service;
 
-import com.akvelon.secure.entity.OrderModel;
-import com.akvelon.secure.entity.OrderProduct;
-import com.akvelon.secure.entity.Product;
-import com.akvelon.secure.entity.User;
+import com.akvelon.secure.entity.*;
+import com.akvelon.secure.entity.enums.UserRoleEnum;
 import com.akvelon.secure.util.HibernateUtil;
 import com.akvelon.secure.util.HibernateUtil_SecurityDb;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -80,6 +81,20 @@ public class DataAcesObject{
                 .getSingleResult();
         return user;
         
+    }
+
+    public String getUserRole(String userName)   // HAS ISSUE
+    {
+        UserRole userRole;
+        String role;
+        final String query = "FROM UserRole ur WHERE ur.userName = '"+userName+"'";
+        userRole = (UserRole) entityManager
+                .createQuery(query)
+                .getSingleResult();
+        role = userRole.getRoleName().toString();
+        System.out.println(role);
+        return role;
+
     }
 
     public boolean createUser(User user)  // HAS ISSUE

@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name="t_customer")
 @XmlRootElement( name = "customer" )
-@XmlType(propOrder={"id", "fullName", "age"})
+@XmlType(propOrder={"id", "fullName"})
 
 public class Customer implements Serializable {
     @Id

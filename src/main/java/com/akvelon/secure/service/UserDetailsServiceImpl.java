@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,11 +21,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserService userService;
 
+    @PersistenceContext
+    EntityManager entityManager;
+
+    @Autowired
+    DataAcesObject dao;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.getUser(email);
         Set<GrantedAuthority> roles = new HashSet();
-        roles.add(new SimpleGrantedAuthority(UserRoleEnum.USER.name()));
+        String role = dao.getUserRole(user.getLogin());
+        roles.add(new SimpleGrantedAuthority(role));
 
         UserDetails userDetails =
                 new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), roles);
