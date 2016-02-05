@@ -1,10 +1,7 @@
 
 package com.akvelon.secure.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -13,11 +10,16 @@ import java.io.Serializable;
 @Entity
 @Table(name="OrderProduct")
 @XmlRootElement( name = "orderproduct" )
-@XmlType(propOrder={"orderId", "productId", "count"})
+@XmlType(propOrder={"idd", "orderId", "productId", "count"})
 public class OrderProduct implements Serializable {
     @Id
-    @Column(name="orderId")
-    private int orderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idd")
+    private int idd;
+
+    @OneToOne
+    @JoinColumn(name ="orderId")
+    private OrderEntity orderId;
     @Column(name="productId")
     private int productId;
     @Column(name="count")
@@ -43,13 +45,23 @@ public class OrderProduct implements Serializable {
     
 
     @XmlElement
-    public int getOrderId() {
+
+
+    public OrderEntity getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(int OrderId) {
+    public void setOrderId(OrderEntity OrderId) {
         this.orderId = OrderId;
     }
 
+    @XmlElement
+    public int getIdd() {
+        return idd;
+    }
+
+    public void setIdd(int idd) {
+        this.idd = idd;
+    }
 
 }

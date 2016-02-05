@@ -12,7 +12,7 @@
         <property name="hibernate.show_sql">true</property>
 
         <mapping class="com.akvelon.secure.entity.Product"/>
-        <mapping class="com.akvelon.secure.entity.OrderModel"/>
+        <mapping class="com.akvelon.secure.entity.OrderEntity"/>
         <mapping class="com.akvelon.secure.entity.OrderProduct"/>
         <mapping class="com.akvelon.secure.entity.Customer"/>
 

@@ -1,18 +1,15 @@
 package com.akvelon.secure.controller;
 
 
-import com.akvelon.secure.entity.OrderModel;
+import com.akvelon.secure.entity.OrderEntity;
 import com.akvelon.secure.entity.User;
 import com.akvelon.secure.service.DataAcesObject;
 import com.akvelon.secure.entity.Product;
-import com.akvelon.secure.service.UserService;
+import com.akvelon.secure.service.GenericDAO;
 import com.akvelon.secure.service.UserServiceImpl;
-import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,25 +28,40 @@ public class RestController {
     private DataAcesObject dao = new DataAcesObject();
 
     @Autowired
+    private GenericDAO<Product,Integer> prDao = new GenericDAO<Product, Integer>();
+
+    @Autowired
     HttpServletRequest request ;
 
 
 // Test Methods
-    @RequestMapping( value = "/kakashkina", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+
+
+    @RequestMapping(value = "/azaza", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String createTestUser(){
-        User useryan = new User("kakashkin", "7110eda4d09e062aa5e4a390b0a572ac0d2c0220");
-        if(dao.createUser(useryan))
-            return "Нормалёк";
-        return "АйАйАй";
+    public String azaza(){
+        return dao.getAuthenticatedUser().toString();
     }
 
+    @Secured({"ADMIN"})
+    @RequestMapping(value = "/poisk", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String poisk(){
+        String result = new String();
+        List<Product> rr = prDao.searchFor("productName","Ga");
+        for (Product p:rr ) {
+            result+=p.getProductName().toString();
+        }
+        String finalResult = result.toString();
+        System.out.println(result.toString());
+        return result;
+    }
 
     @RequestMapping( value = "/tValenka", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String tValenka() {
         System.out.println("первый попал");
-        return dao.getProds("price").toString();
+        return dao.getProductListByParam("price").toString();
     }
 
     @RequestMapping( value = "/testMest}", method = RequestMethod.GET)
@@ -68,10 +80,8 @@ public class RestController {
 
     // End Test Methods
 
-    @RequestMapping(value="createUser", method = RequestMethod.POST)
-    public boolean createUser(@RequestBody User user){
-       return dao.createUser(user);
-   }
+
+
 
 
     //<editor-fold defaultstate="collapsed" desc="COMMON METHODS(for MANAGER and CUSTOMER)">
@@ -80,7 +90,7 @@ public class RestController {
     @RequestMapping( value = "/getProductList/{pop}", method = RequestMethod.GET)
     @ResponseBody
     public List<Product> getProductListJSON(@PathVariable String pop){
-        return dao.getProductList(pop);
+        return dao.getProductListByParam(pop);
     }
 
 
@@ -104,7 +114,7 @@ public class RestController {
 
     @RequestMapping( value = "/getOrdersByCustomerIdXML/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public List<OrderModel> getOrdersByCustomerIdXML(@PathVariable int id)
+    public List<OrderEntity> getOrdersByCustomerIdXML(@PathVariable int id)
     {
         return dao.getOrdersOrderedByParam("CUSTOMERID", Integer.toString(id));
     }
@@ -112,7 +122,7 @@ public class RestController {
 
     @RequestMapping( value = "/getOrderListXML")
     @ResponseBody
-    public List<OrderModel> getOrderListXML()
+    public List<OrderEntity> getOrderListXML()
     {
         return dao.getOrderList();
     }
@@ -122,53 +132,6 @@ public class RestController {
 
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="ADMIN's METHODS">
-    //@PermitAll
 
-    @RequestMapping( value = "/admin/getUserList")
-    @ResponseBody
-    public List<User> getUsers()
-    {
-        return dao.getUsers();
-    }
-
-    //ISSUE
-    @RequestMapping( value = "/admin/createUser/{userName}/{userPassword}/{userRole}", method = RequestMethod.POST)
-    @ResponseBody
-    public String createUser
-    (@PathVariable String userName,
-     @PathVariable String userPassword,
-     @PathVariable String userRole)
-
-    {
-        User user = new User();
-        user.setLogin(userName);
-        user.setPassword(userPassword);
-        // user.setUserRole(userRole);
-
-        if (!dao.createUser(user)) {
-            return "{\"status\":\"ok\"}";
-        } else {
-            return "{\"status\":\"not ok\"}";
-        }
-
-    }
-
-
-    @RequestMapping( value = "/admin/deleteUser/{userName}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public String deleteUser (@PathVariable String userName)
-    {
-        User user = dao.getUserById(userName);
-
-        if (!dao.deleteUser(user)) {
-            return "{\"status\":\"ok\"}";
-        } else {
-            return "{\"status\":\"not ok\"}";
-        }
-
-    }
-
-    //</editor-fold>
 
 }

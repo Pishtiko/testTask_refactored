@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/resources/**", "/**").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and();
 
         http.formLogin()
@@ -47,7 +47,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
+                .and();
+
+        http.authorizeRequests()
+                .antMatchers("/admin/**").access("ADMIN")
+                .anyRequest().authenticated()
+                .and();
+
 
     }
 

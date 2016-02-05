@@ -2,15 +2,9 @@
 package com.akvelon.secure.service;
 
 import com.akvelon.secure.entity.*;
-import com.akvelon.secure.entity.enums.UserRoleEnum;
-import com.akvelon.secure.util.HibernateUtil;
-import com.akvelon.secure.util.HibernateUtil_SecurityDb;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -24,176 +18,123 @@ import java.util.List;
 @Transactional
 public class DataAcesObject{
 
-    //HELPERS
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @SuppressWarnings("unchecked")
-    @Transactional
+//    @Transactional
     public String getAuthenticatedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-
+//        String role = auth.getCredentials().toString();
+        String role1 = auth.getAuthorities().toString();
+//        System.out.println(role);
+        System.out.println(role1);
         System.out.println("User is " + username);
         return username;
     }
 
-
     @SuppressWarnings("unchecked")
     @Transactional
-    public List<Product> getProds(String pop) {
+    public List<Product> getProductListByParam(String op) {
         System.out.println("А здеся?");
-        List<Product> prl = entityManager.createQuery("from Product order by "+pop).getResultList();
-        for ( Product pp : prl ) {
+        List<Product> products = entityManager.createQuery("from Product order by "+op).getResultList();
+        for ( Product pp : products ) {
             System.out.println( pp.toString());
             System.out.println( pp.getProductName().toString());
         }
 
-        return entityManager.createQuery("from Product order by "+pop).getResultList();
+        return entityManager.createQuery("from Product order by "+op).getResultList();
+    }
+    public List<Product> getProductListByParamDesc(String op) {
+        System.out.println("А здеся?");
+        List<Product> products = entityManager.createQuery("from Product order by "+op+" desc").getResultList();
+
+        return products;
     }
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
+ /*   public List<Product> findProductsByName(String searchKey) {
+        throw new NotImplementedException();
+    }*/
 
 //    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 //    SessionFactory securityDbSessionFactory = HibernateUtil_SecurityDb.getSessionFactory();
-
     
     enum allowedPathParams {PRICE,ProductName}
     enum restrictedPathParams {create, delete, update}
-
-    //SECURITY (ADMIN'S ACTIONS)
-
-    public List<User> getUsers()
-    {
-        List<User> users = null;
-        users = (List<User>) entityManager
-                .createQuery("FROM User");
-//
-       return users;
-    }
-    
-    public User getUserById(String userName)   // HAS ISSUE
-    {
-        User user = new User();
-        final String query = "FROM User WHERE user_name = "+userName;
-        user = (User) entityManager
-                .createQuery(query)
-                .getSingleResult();
-        return user;
-        
-    }
-
-    public String getUserRole(String userName)   // HAS ISSUE
-    {
-        UserRole userRole;
-        String role;
-        final String query = "FROM UserRole ur WHERE ur.userName = '"+userName+"'";
-        userRole = (UserRole) entityManager
-                .createQuery(query)
-                .getSingleResult();
-        role = userRole.getRoleName().toString();
-        System.out.println(role);
-        return role;
-
-    }
-
-    public boolean createUser(User user)  // HAS ISSUE
-    {
-        
-        boolean hasErrors = false;
-        
-        try {
-            entityManager.persist(user);
-        }catch (Exception e){
-            hasErrors = true;
-            System.out.println("Exception during persisting "+ e);
-        }
-
-
-        return hasErrors;
-    }
-
-    public boolean deleteUser(User user)
-    {
-        throw new NotImplementedException();
-    }
-            
-    
-    
-    //"CUSTOMERS ACTIONS"
-
     enum ProductOrderParam{price, ProductName}
-    
-    public List<Product> getProductList(String pop)
-    {       
-        List<Product> products = null;
-        throw new NotImplementedException();
-    }
-    
-    public List<Product> findProductsByName(String searchKey)
-    {       
-        List<Product> products = null;
-        final String query = "FROM Product WHERE productName LIKE" + " :SEARCHKEY";
-        products = (List<Product>) entityManager
-                .createQuery(query)
-                .setParameter("SEARCHKEY","%" + searchKey + "%");
-        return products;
-    }
-    
+
+    @SuppressWarnings("unchecked")
+    @Transactional
     public Product getProductById(int id)
     {
         Product product = null;
-        final String query = "FROM Product WHERE id = :ProductId";
-        product = (Product) entityManager
-                .createQuery(query)
-                .setParameter("ProductId", id)
-                .getSingleResult();
+        product = entityManager.find(Product.class, id);
         return product;
     }
-    
-    public OrderModel getOrderbyId(int id)
+    @SuppressWarnings("unchecked")
+    @Transactional
+    public OrderEntity getOrderbyId(int id)
     {
-        OrderModel order = null;
+        OrderEntity order = null;
 
-        final String query = "FROM OrderModel WHERE id = :ORDERID";
-        order = (OrderModel)entityManager
+        final String query = "FROM OrderEntity WHERE id = :ORDERID";
+        order = (OrderEntity)entityManager
                 .createQuery(query)
                 .setParameter("ORDERID", id)
                 .getSingleResult();
-
         return order;
-        
     }
-    
-    public List<OrderModel> getOrderList()
+    @SuppressWarnings("unchecked")
+    @Transactional
+    public List<OrderEntity> getOrderList()
     {
-        List<OrderModel> orders = null;
-        orders = (List<OrderModel>) entityManager
-                .createQuery("FROM OrderModel");
+        List<OrderEntity> orders = null;
+        orders = (List<OrderEntity>) entityManager
+                .createQuery("FROM OrderEntity");
        return orders;
     }
-    
-    public List<OrderModel> getOrdersOrderedByParam(String selectParam, String value )
+    @SuppressWarnings("unchecked")
+    @Transactional
+    public List<OrderEntity> getOrdersOrderedByParam(String selectParam, String value )
     {
-        List<OrderModel> orders = null;
-        String query = "FROM OrderModel WHERE " + selectParam + "= :" + selectParam;
-        orders = (List<OrderModel>)entityManager
+        List<OrderEntity> orders = null;
+        String query = "FROM OrderEntity WHERE " + selectParam + "= :" + selectParam;
+        orders = (List<OrderEntity>)entityManager
                     .createQuery(query)
                     .setParameter(selectParam, Integer.parseInt(value));
         return orders;
     }
-    
-    public int getCurrentCustomerId() // HAS ISSUE
+    @Transactional
+    public List<OrderEntity> getOrdersOrderedByParamDesc(String selectParam, String value )
     {
-       throw new NotImplementedException();
+        List<OrderEntity> orders = null;
+        String query = "FROM OrderEntity WHERE " + selectParam + "= :" + selectParam+ " desc";
+        orders = (List<OrderEntity>)entityManager
+                .createQuery(query)
+                .setParameter(selectParam, Integer.parseInt(value));
+        return orders;
     }
-    
-    public List<OrderProduct> getOrdersByCustomerId() // HAS ISSUE
+
+    @SuppressWarnings("unchecked")
+    @Transactional
+    public List<OrderEntity> getOrdersOfCustomer(String userName)  {
+        List<OrderEntity> orders;
+        String query = "SELECT op.orderId FROM OrderEntity op WHERE op.userName = :userName";
+        orders = (List<OrderEntity>)entityManager
+                .createQuery(query)
+                .setParameter(userName, userName);
+        return orders;
+    }
+    @SuppressWarnings("unchecked")
+    @Transactional
+    public List<OrderEntity> getMyOrders() // HAS ISSUE
     {
-      return Collections.EMPTY_LIST;   // TEMPORARY - MUST CHANGE
+        return getOrdersOfCustomer(getAuthenticatedUser());
     }
-    
-    
+
+    @SuppressWarnings("unchecked")
+    @Transactional
     public boolean saveOrderProduct(OrderProduct orderProduct)
     {
         boolean hasErrors = false;
@@ -207,8 +148,9 @@ public class DataAcesObject{
 
         return hasErrors;
     }
-    
-     public boolean saveOrder(OrderModel order)
+    @SuppressWarnings("unchecked")
+    @Transactional
+     public boolean saveOrder(OrderEntity order)
     {
         boolean hasErrors=false;
         try{
@@ -221,7 +163,7 @@ public class DataAcesObject{
         return hasErrors;
     }
     //HELPER METHOD
-    
+
     private boolean checkRequestHelper(String pathParam)
     {
         if ( allowedPathParams.valueOf(pathParam)!= null 
@@ -230,4 +172,44 @@ public class DataAcesObject{
         else 
             return false;
     }
+
+    //"CUSTOMERS ACTIONS"
+
+
+
+//    @SuppressWarnings("unchecked")
+//    @Transactional
+//    public List<Product> getProductList(String pop)
+//    {
+//        List<Product> products = null;
+//        throw new NotImplementedException();
+//    }
+
+    @SuppressWarnings("unchecked")
+    @Transactional
+    public List<Product> findProductsByName(String searchKey)
+    {
+        List<Product> products = null;
+        final String query = "FROM Product WHERE productName LIKE" + " :SEARCHKEY";
+        products = (List<Product>) entityManager
+                .createQuery(query)
+                .setParameter("SEARCHKEY","%" + searchKey + "%");
+        return products;
+    }
+
+//HELPERS
+
+    /*@Transactional
+    public boolean incrementStat()
+    {
+        boolean hasErrors = false;
+    User myUser = entityManager.createCritetia(User.class)
+            .add(Restrictions.eq("id", username)
+                    .setLockMode(LockMode.UPGRADE)
+                    .uniqueResult();
+    myUser.setAmount(myUser.getAmount() + 100);
+    myUser.save();
+        return !hasErrors;
+    }*/
+
 }

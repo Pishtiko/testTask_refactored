@@ -25,13 +25,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     EntityManager entityManager;
 
     @Autowired
-    DataAcesObject dao;
+    AdminDao adminDao;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.getUser(email);
         Set<GrantedAuthority> roles = new HashSet();
-        String role = dao.getUserRole(user.getLogin());
+        String role = adminDao.getUserRole(user.getLogin());
         roles.add(new SimpleGrantedAuthority(role));
 
         UserDetails userDetails =
