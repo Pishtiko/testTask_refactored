@@ -1,44 +1,42 @@
 package com.akvelon.secure.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 @Entity
-@Table(name="users")
-@XmlRootElement( name = "product" )
-@XmlType(propOrder={"login", "password"})
-public class User {
+@Table(name = "t_users")
+public class User implements Serializable{
+
+    public User(){}
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
 
     @Id
-    private String user_name;
-    private String user_pass;
+    @Column(name = "userName")
+    private String login;
+    @Column(name = "password")
+    private String password;
 
-    public User(String login, String password) {
-        this.user_name = login;
-        this.user_pass = password;
-    }
-
-    public User() {
-
-    }
 
     public String getLogin() {
-        return user_name;
+        return login;
     }
 
     public void setLogin(String login) {
-        this.user_name = login;
+        this.login = login;
     }
 
     public String getPassword() {
-        return user_pass;
+        return password;
     }
 
     public void setPassword(String password) {
-        this.user_pass = password;
+        this.password = password;
     }
 
 

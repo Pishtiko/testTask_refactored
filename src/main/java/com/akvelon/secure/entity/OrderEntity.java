@@ -1,6 +1,8 @@
 
 package com.akvelon.secure.entity;
 
+import com.akvelon.secure.entity.enums.OrderStatus;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -10,47 +12,68 @@ import java.util.Date;
 
 
 @Entity
-@Table(name="t_orders")
-@XmlRootElement( name = "t_order" )
-@XmlType(propOrder={"orderId", "userId", "createDate"})
+@Table(name="t_order")
 public class OrderEntity implements Serializable {
-    
-    @XmlElement
-    public int getOrderId() {
-        return orderId;
-    }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-    
-    @XmlElement
+
+    public OrderEntity(){}
+//    public OrderEntity(UserCart cart){
+//        this.orderId = cart.orderId;
+//        this.userId = cart.userName;
+//    }
+
+
+
+    @Id
+    @Column(name="idd")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idd;
+
+//    @OneToOne//(cascade=CascadeType.ALL)
+//    @JoinColumn(name = "orderId")
+//    private OrderProduct orderId;
+
+    @ManyToOne
+    @JoinColumn(name = "userName")
+    private User userId;
+
+//    @Id
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="CreateDate", nullable = false, updatable = false, insertable = false)
+    private Date createDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "OrderStatus")
+    private OrderStatus status;
+
+
+    public int getIdd() { return idd; }
+    public void setIdd(int idd) {  this.idd = idd; }
+//
+//    public OrderProduct getOrderId() {   return orderId;   }
+//    public void setOrderId(OrderProduct orderId) {
+//        this.orderId = orderId;
+//    }
 
     public User getUserId() {
         return userId;
     }
-
     public void setUserId(User user) {
         this.userId = user;
     }
-    
-    @XmlElement
 
     public Date getCreateDate() {
         return createDate;
     }
-
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-    @Id
-    @Column (name = "orderId")
-    private int orderId;
-    @ManyToOne
-    @JoinColumn(name = "userName")
-    private User userId;
-    @Column(name="CreateDate")
-    private Date createDate;
+
+    public OrderStatus getStatus() { return status; }
+    public void setStatus(OrderStatus status) {  this.status = status;  }
+
 
     
 }

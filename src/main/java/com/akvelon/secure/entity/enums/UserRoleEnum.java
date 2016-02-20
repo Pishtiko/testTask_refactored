@@ -6,13 +6,12 @@ import javax.persistence.Table;
 
 public enum UserRoleEnum {
 
-    ADMIN,
-    MANAGER,
-    CUSTOMER,
-    USER,
+    ROLE_ADMIN,
+    ROLE_MANAGER,
+    ROLE_CUSTOMER,
+    ROLE_USER,
     ANONYMOUS;
 
-    UserRoleEnum() {
-    }
+    UserRoleEnum() {}
 
 }

@@ -2,26 +2,18 @@
 package com.akvelon.secure.entity;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
-/**
- *
- * @author HP-G6
- */
+
 @Entity
 @Table(name="t_customer")
-@XmlRootElement( name = "customer" )
-@XmlType(propOrder={"id", "fullName"})
 
 public class Customer implements Serializable {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="CustomerId")
-    private int id;
-    @Column(name="CustomerName")
+    @OneToOne
+    @JoinColumn(name="userName")
+    private User userEmail;
+    @Column(name="fullName")
     private String fullName;
 //    @Column(name="AGE")
 //    private int age;
@@ -29,29 +21,20 @@ public class Customer implements Serializable {
     
     
 
-    @XmlElement
-    public int getId() {
-        return id;
+
+    public User getUserEmail() {
+        return userEmail;
+    }
+    public void setUserEmail(User id) {
+        this.userEmail = id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-    @XmlElement
     public String getFullName() {
         return fullName;
     }
-
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-//    @XmlElement
-//    public int getAge() {
-//        return age;
-//    }
-//
-//    public void setAge(int age) {
-//        this.age = age;
-//    }
+
     
 }

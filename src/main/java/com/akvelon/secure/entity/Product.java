@@ -1,6 +1,9 @@
 
 package com.akvelon.secure.entity;
 
+import org.hibernate.search.annotations.Indexed;
+import org.springframework.context.annotation.Primary;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -9,10 +12,9 @@ import java.io.Serializable;
 
 
 @Entity
-@Table(name="product")
-@XmlRootElement( name = "product" )
-@XmlType(propOrder={"productId", "productName", "price"})
+@Table(name="t_product")
 public class Product implements Serializable {
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="ProductId")
@@ -21,14 +23,13 @@ public class Product implements Serializable {
     private String productName;
     @Column(name="Price")
     private int price;
+    @Column (name = "Description")
+    private String description;
 
-//    @Column(name="Description")
-//    private String description;
 
     public Product(){}
     
 
-    @XmlElement
     public int getProductId() {
         return productId;
     }
@@ -36,7 +37,6 @@ public class Product implements Serializable {
         this.productId = productId;
     }
 
-    @XmlElement
     public String getProductName() {
         return productName;
     }
@@ -44,7 +44,6 @@ public class Product implements Serializable {
         this.productName = productName;
     }
 
-    @XmlElement
     public int getPrice() {
         return price;
     }
@@ -52,7 +51,9 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-
+    public String getDescription() { return description;  }
+    public void setDescription(String description) {  this.description = description; }
+/*
 
     @Override
     public String toString() {
@@ -60,15 +61,8 @@ public class Product implements Serializable {
                 "productId: %s\nproductName: %s\nprice: %s",
                 productId, productName, price);
     }
-//    @XmlElement
-//    public String getDescription() {  return description;  }
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
+*/
 
-
-
-    
     
     
 }

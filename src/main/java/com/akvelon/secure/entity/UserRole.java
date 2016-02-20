@@ -7,20 +7,20 @@ import com.akvelon.secure.entity.enums.UserRoleEnum;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 
 @Entity
-@Table(name="user_roles")
-@XmlRootElement( name = "user_roles" )
-@XmlType(propOrder={"userName", "roleName"})
-public class UserRole {
+@Table(name="t_user_roles")
+public class UserRole implements Serializable {
 
     @Id
-    @Column(name = "user_name")
-    private String userName;
+    @OneToOne
+    @JoinColumn(name="userName")
+    private User userName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_name")
+    @Column(name = "roleName")
     private UserRoleEnum roleName;
 
     public UserRoleEnum getRoleName() {
@@ -31,11 +31,11 @@ public class UserRole {
         this.roleName = roleName;
     }
 
-    public String getUserName() {
+    public User getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setUserName(User userName) {
         this.userName = userName;
     }
 }

@@ -1,4 +1,4 @@
-package com.akvelon.secure.service;
+package com.akvelon.secure.service.dao;
 
 import com.akvelon.secure.entity.Product;
 import com.akvelon.secure.entity.User;
@@ -21,7 +21,7 @@ public class AdminDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @SuppressWarnings("unchecked")
+    
     @Transactional
     public List<User> getUsers()
     {
@@ -31,19 +31,19 @@ public class AdminDao {
         return users;
     }
 
-    @SuppressWarnings("unchecked")
+    
     @Transactional
     public User getUserById(String userName)   // HAS ISSUE
     {
         User user = new User();
-        final String query = "FROM User WHERE user_name = "+userName;
+        final String query = "FROM User WHERE login = "+"'"+userName+"'";
         user = (User) entityManager
                 .createQuery(query)
                 .getSingleResult();
         return user;
     }
 
-    @SuppressWarnings("unchecked")
+    
     @Transactional
     public String getUserRole(String userName)   // HAS ISSUE
     {
@@ -56,7 +56,6 @@ public class AdminDao {
         role = userRole.getRoleName().toString();
         System.out.println(role);
         return role;
-
     }
 
     @Transactional
@@ -64,10 +63,13 @@ public class AdminDao {
     {
         boolean hasErrors = false;
         try {
-            UserRole userRole = new UserRole();
-            userRole.setUserName(user.getLogin());
-            userRole.setRoleName(UserRoleEnum.valueOf(role));
-            entityManager.persist(user);
+            if (entityManager.find(User.class, user.getLogin())==null) {
+                UserRole userRole = new UserRole();
+                userRole.setUserName(user);
+                userRole.setRoleName(UserRoleEnum.valueOf(role));
+                entityManager.persist(user);
+                entityManager.persist(userRole);
+            }
         }catch (Exception e){
             hasErrors = true;
             System.out.println("Exception during persisting "+ e);
@@ -75,11 +77,17 @@ public class AdminDao {
         return hasErrors;
     }
 
-    @SuppressWarnings("unchecked")
+    
     @Transactional
     public boolean deleteUser(User user)
     {
-        throw new NotImplementedException();
+        boolean hasErrors = false;
+        try {
+            entityManager.remove(user);
+        }catch (Exception e){
+            hasErrors = true;
+        }
+        return hasErrors;
     }
 
 //HELPERS

@@ -1,5 +1,160 @@
-var rootURL = "http://localhost:8084/secure/service/";
+var rootURL = "http://localhost:8084/secure/";
+var admin = "/admin";
+var customer = "/main";
+var employee = "/service"
 var currentEntity;
+$dataTable = $('#data-table table');
+
+$(document).ready(function(){
+    $('#data-table tr').click(function(){
+
+            $(this).toggleClass("alert-danger");
+
+    });
+});
+
+//  HELPER METHODS
+
+function renderTable(data, textstatus){
+    // JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
+    var list = data == null ? [] : (data instanceof Array ? data : [data]);
+    $dataTable.remove();
+    $.each(data, function(index, object) {
+        $dataTable.append('<tr><a href="#" data-identity="' + object.product.productId +'">' + object.product.productName + '</a></tr>');
+    });
+    console.log('getting data succeed: ' + data);
+    //dataTable.append()
+    currentEntity = data.product;
+    renderDetails(currentEntity);
+}   //TODO: CHECK FOR ISSUES
+function renderData(data, textstatus){
+    $('#btnDelete').show();
+    console.log('findById success: ' + data.product.productName);
+
+    currentEntity = data.product;
+    renderDetails(currentEntity);
+}   //TODO: CHECK FOR ISSUES
+function ajaxGET(URL){
+    console.log(self);
+    $.ajax({
+        type: 'GET',
+        url: URL,
+        dataType: "json",
+        success: renderData(data, textstatus)
+    });
+}                   //TODO: CHECK FOR ISSUES
+function ajaxPOST(URL){
+    console.log(self);
+    $.ajax({
+        type: 'GET',
+        url: URL,
+        dataType: "json",
+        success: renderData(data, textstatus)
+    });
+}                  //TODO: CHECK FOR ISSUES
+function ajaxPUT(URL, object){
+    console.log(self);
+    $.ajax({
+        type: 'PUT',
+        url: URL,
+        dataType: "json",
+        //success: renderData(data, textstatus),
+        data: object,
+        contentType: Array
+    });
+}             //TODO: CHECK FOR ISSUES
+function ajaxDELETE(URL){
+    console.log(self);
+    $.ajax({
+        type: 'GET',
+        url: URL,
+        dataType: "json",
+        success: renderData(data, textstatus)
+    });
+}               //TODO: CHECK FOR ISSUES
+
+//ADMIN LOGIC
+
+function getUserList(){
+    var URL = rootURL+admin+"/getUserList";
+    ajaxGET(URL);
+}
+function createUser(userRole){
+    var URL = rootURL+admin+"/createUser/"+userRole;
+    ajaxPOST(URL);
+}
+function deleteUser(userName){
+    var URL = rootURL+admin+"/deleteUser/"+userName;
+    ajaxDELETE(URL);
+}
+
+//  USER PAGE LOGIC
+
+function findAllp(pop){
+var URL = rootURL+customer+"/getProductList/"+pop;
+    ajaxGET(URL);
+}
+function getProductList(pop){
+    var URL = rootURL+customer+"/getProductList/"+pop;
+    ajaxGET(URL);
+}
+function searchProduct(searchKey, pop){
+    var URL = rootURL+customer+"/findProduct/"+searchKey+"/"+pop;
+    ajaxGET(URL);
+}
+function getMyOrders(){
+    var URL = rootURL+customer+"/getMyOrders";
+    ajaxGET(URL);
+}
+function previewCart(){
+    var URL = rootURL+customer+"/getCartContent";
+    ajaxGET(URL);
+}
+function makeOrder(){
+    var URL = rootURL+customer+"/makeOrder";
+    ajaxPOST(URL);
+}
+function cleanTheCart(){
+    var URL = rootURL+customer+"/cleanTheCart";
+    ajaxPOST(URL);
+}
+function addToCart(productId, count){
+    var URL = rootURL+customer+"/adToCart/"+productId+"/"+count;
+    ajaxPOST(URL);
+}
+function removeFromCart(productId){
+    var URL = rootURL+customer+"/removeFromCart/"+"/"+productId
+}
+
+//  EMPLOYEE LOGIC
+
+function getProductList(){
+    var URL = rootURL+customer+"/getProductList";
+    ajaxGET(URL);
+}
+function getOrderList(){
+    var URL = rootURL+employee+"/getOrderList";
+    ajaxGET(URL);
+}
+function getOrdersOfCustomer(id){
+    var URL = rootURL+employee+"/getOrdersOfCustomer/"+id;
+    ajaxGET(URL);
+}
+function updateOrder(orderId, object){
+    var URL = rootURL+employee+"/updateOrder/"+orderId;
+    ajaxPUT(URL, object);
+}
+function cancelOrder(orderId){
+    var URL = rootURL+employee+"/cancelOrder/"+orderId;
+    ajaxGET(URL);
+}
+function confirmOrder(orderId){
+    var URL = rootURL+employee+"/confirmOrder/"+orderId;
+    ajaxPOST(URL);
+}
+
+
+//TODO:
 
 function findAll() {
 
