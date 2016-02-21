@@ -7,6 +7,7 @@ import com.akvelon.secure.service.dao.CustomerDao;
 import com.akvelon.secure.service.dao.enums.ORD;
 import com.akvelon.secure.util.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +18,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.List;
 
 @Controller
-//@Transactional
-//@Secured(value = "[ROLE_USER]", "ROLE_EMPLOYEE")
+@Secured(value = {"ROLE_CUSTOMER", "ROLE_ADMIN"})
 @RequestMapping(value = "/main")
 public class RestControllerForCustomer {
 

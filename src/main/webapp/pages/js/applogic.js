@@ -1,31 +1,134 @@
-var rootURL = "http://localhost:8084/secure/";
+var rootURL = "http://localhost:8084/secure";
 var admin = "/admin";
 var customer = "/main";
 var employee = "/service"
 var currentEntity;
-$dataTable = $('#data-table table');
+$dataTable = $('#data-table');
 
 $(document).ready(function(){
+    $('.test-button').click(function(){createTestUser()});
+    $('.test-get-button').click(function(){getTestUser()});
+    $('.test-get-but').click(function(){getTest()});
+    //$('.selection-test').click(function(){
+    //    var trid = [];
+    //    $('.alert-danger tr').each(function(){
+    //
+    //        trid+= $(this).attr('id');
+    //    });
+    //    console.log(trid);
+    //})
     $('#data-table tr').click(function(){
 
-            $(this).toggleClass("alert-danger");
+        $(this).toggleClass("alert-danger");
+        //var trid = $(this).closest('tr').attr('id');
+
 
     });
+
+
+
 });
+
+
+
+//TEST
+
+function getTestUser(){
+    //console.log(self);
+    $.ajax({
+        type: 'GET',
+        url: rootURL+"/admin/getUserList",
+        dataType: "json",
+        success: function(data){
+            console.log(JSON.stringify(data))
+            }
+
+
+    });
+
+}
+function getTest(){
+    //console.log(self);
+    var URL = rootURL+"/main/getProductList/price";
+    ajaxGET(URL);
+
+}
+function createTestUser(){
+
+    var testuser = new Object();
+        testuser.login = "pishti";
+        testuser.password = "1234";
+    console.log(JSON.stringify(testuser));
+
+    createUser("ROLE_ADMIN", testuser);
+}
 
 //  HELPER METHODS
 
-function renderTable(data, textstatus){
+function renderTable(data){
     // JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
     var list = data == null ? [] : (data instanceof Array ? data : [data]);
-    $dataTable.remove();
+    //$dataTable.remove();
+    //$dataTable.html("");
+
     $.each(data, function(index, object) {
-        $dataTable.append('<tr><a href="#" data-identity="' + object.product.productId +'">' + object.product.productName + '</a></tr>');
+        $('#data-table').find('>tbody').append('<tr id ="'+object.productId+'"></tr>');
+        //$('#data-table').append('<tr></tr>');
+
+        //$('#data-table').find('> tbody > tr:last').append('<td>'+object.productId+'object.productName'+object.productName+'</td>');
+
+        var output = "";
+        output+="<td>";
+        output+=object.productId;
+        output+="</td>";
+        output+="<td>";
+        output+=object.productName;
+        output+="</td>";
+
+
+        $('#data-table').find('> tbody > tr:last').append(output);
+        //console.log($('#data-table').find('> tbody > tr > id> 11'));
     });
     console.log('getting data succeed: ' + data);
     //dataTable.append()
     currentEntity = data.product;
-    renderDetails(currentEntity);
+    var trid = [];
+    $('#data-table tr').click(function(){
+        $(this).toggleClass("alert-danger");
+        var ind = $(this).closest('tr').attr('id');
+        var ind2 = $(this).attr('id');
+        console.log(ind);
+        console.log(ind2);
+
+        if ($('this').hasClass($('.alert-danger'))) {
+            trid.push({
+                key: ind,
+                value: 1
+            })
+        }
+        else {
+            trid.push({
+                key: ind,
+                value: 0
+            })
+        }
+        //var trid = $(this).closest('tr').attr('id');
+    });
+    $('.selection-test').click(function(){
+        var kaka = "";
+        var lyalya = $('.alert-danger tr');
+        $.each(trid, function(index, obj){
+            console.log(obj);
+            console.log(obj[index]);
+            console.log(obj[1]);
+            kaka+= obj.value;
+            console.log("fuf");
+        })
+        console.log(kaka);
+        });
+
+
+    //renderDetails(currentEntity);
 }   //TODO: CHECK FOR ISSUES
 function renderData(data, textstatus){
     $('#btnDelete').show();
@@ -35,32 +138,32 @@ function renderData(data, textstatus){
     renderDetails(currentEntity);
 }   //TODO: CHECK FOR ISSUES
 function ajaxGET(URL){
-    console.log(self);
+    //console.log(self);
     $.ajax({
         type: 'GET',
         url: URL,
         dataType: "json",
-        success: renderData(data, textstatus)
+        success: function(data){renderTable(data);}
     });
 }                   //TODO: CHECK FOR ISSUES
 function ajaxPOST(URL){
     console.log(self);
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         url: URL,
         dataType: "json",
         success: renderData(data, textstatus)
     });
 }                  //TODO: CHECK FOR ISSUES
 function ajaxPUT(URL, object){
-    console.log(self);
     $.ajax({
-        type: 'PUT',
+        type: 'POST',
         url: URL,
-        dataType: "json",
-        //success: renderData(data, textstatus),
-        data: object,
-        contentType: Array
+        //dataType: "JSON",
+        success: console.log("ok"),
+            //renderData(data, textstatus),
+        data: JSON.stringify(object),
+        contentType: 'application/json'
     });
 }             //TODO: CHECK FOR ISSUES
 function ajaxDELETE(URL){
@@ -79,9 +182,9 @@ function getUserList(){
     var URL = rootURL+admin+"/getUserList";
     ajaxGET(URL);
 }
-function createUser(userRole){
+function createUser(userRole, user){
     var URL = rootURL+admin+"/createUser/"+userRole;
-    ajaxPOST(URL);
+    ajaxPUT(URL, user);
 }
 function deleteUser(userName){
     var URL = rootURL+admin+"/deleteUser/"+userName;

@@ -60,6 +60,10 @@
 
         </div>
         <div class="user-data">
+            <a><a class="btn btn-danger test-button" role="button">test</a></a>
+            <a><a class="btn btn-danger test-get-button" role="button">testGet</a></a>
+            <a><a class="btn btn-danger test-get-but" role="button">testGet2</a></a>
+            <a><a class="btn btn-danger selection-test" role="button">testGet2</a></a>
 
         </div>
         <div class="user-details">

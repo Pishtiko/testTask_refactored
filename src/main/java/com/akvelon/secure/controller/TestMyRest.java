@@ -174,7 +174,6 @@ public class TestMyRest {
         return Helper.getCurrentUsersName().toString();
     }
 
-//    @Secured({"ADMIN"})
     @RequestMapping(value = "/poisk", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String poisk(){

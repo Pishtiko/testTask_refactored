@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @Transactional
-@Secured(value = "[ROLE_ADMIN]")
+@Secured(value = "ROLE_ADMIN")
 @RequestMapping(value = "/admin")
 
 public class RestControllerForAdmin {
@@ -35,7 +35,7 @@ public class RestControllerForAdmin {
     }
 
     //ISSUE
-    @RequestMapping( value = "/createUser/{userRole}", method = RequestMethod.GET)
+    @RequestMapping( value = "/createUser/{userRole}", method = RequestMethod.POST)
     @ResponseBody
     public String createUser
     (@RequestBody User user,

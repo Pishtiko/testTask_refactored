@@ -20,18 +20,18 @@
         <mapping class="com.akvelon.secure.entity.UserRole"/>
         <mapping class="com.akvelon.secure.entity.UserCart"/>
         <mapping class="com.akvelon.secure.entity.User"/>
-        <mapping class="com.akvelon.secure.experimental.temporary_entity.OrderEntity"/>
-        <mapping class="com.akvelon.secure.experimental.temporary_entity.OrderProduct"/>
-        <mapping class="com.akvelon.secure.experimental.temporary_entity.Product"/>
-        <mapping class="com.akvelon.secure.experimental.temporary_entity.StatisticEntity"/>
+        <mapping class="com.akvelon.secure.experimental.temporary_entity.xOrderEntity"/>
+        <mapping class="com.akvelon.secure.experimental.temporary_entity.xOrderProduct"/>
+        <mapping class="com.akvelon.secure.experimental.temporary_entity.xProduct"/>
+        <mapping class="com.akvelon.secure.experimental.temporary_entity.xStatisticEntity"/>
         <mapping class="com.akvelon.secure.experimental.temporary_entity.TCustomer"/>
         <mapping class="com.akvelon.secure.experimental.temporary_entity.TOrder"/>
         <mapping class="com.akvelon.secure.experimental.temporary_entity.TOrderProduct"/>
         <mapping class="com.akvelon.secure.experimental.temporary_entity.TProduct"/>
         <mapping class="com.akvelon.secure.experimental.temporary_entity.TUserRoles"/>
         <mapping class="com.akvelon.secure.experimental.temporary_entity.TUserCart"/>
-        <mapping class="com.akvelon.secure.experimental.temporary_entity.TUsers"/>
-        <mapping class="com.akvelon.secure.experimental.temporary_entity.UserRoles"/>
+        <mapping class="com.akvelon.secure.experimental.temporary_entity.xTUsers"/>
+        <mapping class="com.akvelon.secure.experimental.temporary_entity.xUserRoles"/>
 
     </session-factory>
 </hibernate-configuration>

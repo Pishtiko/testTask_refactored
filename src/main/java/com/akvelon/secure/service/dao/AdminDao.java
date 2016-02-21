@@ -27,7 +27,7 @@ public class AdminDao {
     {
         List<User> users = null;
         users = (List<User>) entityManager
-                .createQuery("FROM User");
+                .createQuery("FROM User").getResultList();
         return users;
     }
 

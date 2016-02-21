@@ -8,6 +8,7 @@ import com.akvelon.secure.service.dao.CustomerDao;
 import com.akvelon.secure.service.dao.GenericDaoImpl;
 import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Controller
 @Transactional
+@Secured(value = {"ROLE_USER", "ROLE_ADMIN"})
 @RequestMapping(value = "/service")
 public class RestControllerForEmployee {
 
