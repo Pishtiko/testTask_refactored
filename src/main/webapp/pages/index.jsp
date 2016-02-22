@@ -21,8 +21,8 @@
     <link href="<c:url value="/pages/css/jumbotron-narrow.css" />" rel="stylesheet">
     <link href="<c:url value="/pages/css/bootstrap.min.css" />" rel="stylesheet">
 
-    <script src="pages/js/jquery-2.2.0.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/Chart.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/applogic.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -56,7 +56,11 @@
         </sec:authorize>
     </div>
     <sec:authorize access="hasRole('ROLE_ADMIN')">
-        <div class="user-panel">
+        <div class="user-panelka">
+            <input type="submit" id="sub" value="Запустить">
+            <canvas id="buyers" width="600" height="400"></canvas>
+            <a><a class="btn btn-danger test-chart" role="button">test chart</a></a>
+
 
         </div>
         <div class="user-data">

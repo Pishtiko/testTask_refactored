@@ -38,7 +38,7 @@ public class StatisticsService {
                 "USE [Temporary]" +
                 " SELECT "+
                 " CONVERT(date, t_timestamp) AS date_, "+
-                " COUNT(DISTINCT userName) AS usiqueUsers" +
+                " COUNT( userName) AS usiqueUsers" +
                 " FROM StatisticEntity" +
                 " GROUP BY CONVERT(date, t_timestamp)" +
                 " ORDER By CONVERT(date, t_timestamp)";
@@ -70,7 +70,7 @@ public class StatisticsService {
 
 
         stats =  entityManager
-                .createNativeQuery(hQuery)
+                .createQuery(hQuery)
                 .getResultList();
 
         return stats;

@@ -24,14 +24,131 @@ $(document).ready(function(){
 
 
     });
+    $('.test-chart').click(function(){
+        updateStats();
+        //updateChart()
+    });
 
 
+    $('#sub').on('click', function() {
+        // График
+        updateChart();
+        var buyers = document.getElementById('buyers').getContext('2d');
+        var buyerData = {
+            labels : ["Январь","Февраль","Март","Апрель","Май","Июнь"],
+            datasets : [
+                {
+                    fillColor : "rgba(172,194,132,0.4)",
+                    strokeColor : "#ACC26D",
+                    pointColor : "#fff",
+                    pointStrokeColor : "#9DB86D",
+                    data : [200,155,100,250,305,250]
+                }
+            ]
+        }
+        for(var i = 0; i < 6; i++) {
+            buyerData.datasets[0].data[i] = (Math.random()*250)+1|0;
+        }
+        new Chart(buyers).Line(buyerData);
+        // Круговая диаграмма
+        for(var j = 0; j < 4; j++) {
+            pieData[j].value = (Math.random()*100)+1|0;
+        }
+        new Chart(countries).Pie(pieData, pieOptions);
+        // Гистограмма
+        for(var k = 0; k < 6; k++) {
+            barData.datasets[0].data[k] = (Math.random()*250)+1|0;
+            barData.datasets[1].data[k] = (Math.random()*250)+1|0;
+        }
+        new Chart(income).Bar(barData);
+    });
 
 });
 
+//TEST CHART
 
+
+
+
+function updateChart(){
+
+    var buyers = document.getElementById('buyers').getContext('2d');
+    var buyerData = {
+        labels : ["Январь","Февраль","Март","Апрель","Май","Июнь"],
+        datasets : [
+            {
+                fillColor : "rgba(172,194,132,0.4)",
+                strokeColor : "#ACC26D",
+                pointColor : "#fff",
+                pointStrokeColor : "#9DB86D",
+                data : [200,155,100,250,305,250]
+            }
+        ]
+    }
+    new Chart(buyers).Line(buyerData);
+}
+
+function updateStats(){                 //TODO: replace test function
+    var URL = rootURL+"/stat/getStat";
+    ajaxGET2(URL, renderStats)
+}
+function renderStats(data){                         //TODO: Implement
+
+    var buyers = document.getElementById('buyers').getContext('2d');
+    var buyerData = {
+        labels : [],
+        datasets : [
+            {
+                fillColor : "rgba(172,194,132,0.4)",
+                strokeColor : "#ACC26D",
+                pointColor : "#fff",
+                pointStrokeColor : "#9DB86D",
+                data : []
+            }
+        ]
+    }
+    $.each(data, function(index, object){
+        console.log(object);
+        console.log(object[0]);
+        console.log(object[1]);
+        //console.log(buyerData.datasets[0]);
+        //console.log(buyerData.datasets[data][index]);
+        buyerData.labels.push(object[0]);
+        buyerData.datasets[0].data.push(object[1]);
+    })
+    console.log(buyerData.datasets[0][data]);
+    new Chart(buyers).Line(buyerData);
+}
+
+
+
+var buyers = document.getElementById('buyers').getContext('2d');
+var buyerData = {
+    labels : ["Январь","Февраль","Март","Апрель","Май","Июнь"],
+    datasets : [
+        {
+            fillColor : "rgba(172,194,132,0.4)",
+            strokeColor : "#ACC26D",
+            pointColor : "#fff",
+            pointStrokeColor : "#9DB86D",
+            data : [200,155,100,250,305,250]
+        }
+    ]
+}
+
+new Chart(buyers).Line(buyerData);
 
 //TEST
+
+function ajaxGET2(URL, callback){
+    //console.log(self);
+    $.ajax({
+        type: 'GET',
+        url: URL,
+        dataType: "json",
+        success: function(data){callback(data);}
+    });
+}
 
 function getTestUser(){
     //console.log(self);
