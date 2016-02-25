@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @Transactional
-@Secured(value = {"ROLE_USER", "ROLE_ADMIN"})
+@Secured(value = {"ROLE_EMPLOYEE", "ROLE_ADMIN"})
 @RequestMapping(value = "/service")
 public class RestControllerForEmployee {
 
@@ -104,5 +104,10 @@ public class RestControllerForEmployee {
         return hasErrors;
     }
 
+    @RequestMapping( value = "/getOrderById/{orderId}", method = RequestMethod.GET)
+    @ResponseBody
+    public  List<OrderProduct> getOrderById(@PathVariable int orderId){
+        return dao.getOrderById(orderId);
+    }
 
 }

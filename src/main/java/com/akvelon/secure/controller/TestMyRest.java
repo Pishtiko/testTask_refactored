@@ -110,7 +110,7 @@ public class TestMyRest {
             product.setPrice(10+i);
             entityManager.persist(product);
             entityManager.refresh(product);
-            customerDao.addToCart(product, 5);
+//            customerDao.addToCart(product, 5);
         }
         entityManager.flush();
         List<Product> produkti = customerDao.getProductListByParam("Price");

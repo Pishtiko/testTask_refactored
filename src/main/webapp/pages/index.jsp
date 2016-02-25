@@ -17,12 +17,15 @@
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/pages/css/bootstrap.css" />" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles  -->
     <link href="<c:url value="/pages/css/jumbotron-narrow.css" />" rel="stylesheet">
     <link href="<c:url value="/pages/css/bootstrap.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/pages/css/easyTableFilter.css" />" rel="stylesheet">
 
     <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/Chart.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/easyTableFilter.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/applogic.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -36,101 +39,108 @@
 
 <div class="container">
 
-    <div class="nav" style="background-color: 	#C0C0C0; margin-top: 20px;">
+    <div class="nav" style="background-color: 	#F7D358; margin-top: 20px;">
 
 
         <sec:authorize access="!isAuthenticated()">
-            <p><a class="btn btn-lg btn-success" href="<c:url value="/login" />" role="button">Войти</a></p>
+            <p><a class="btn btn-lg btn-success" href="<c:url value="/login" />" role="button">Войти</a>
+            <p>&copy; Akvelon 2016</p></p>
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
-        <%--<sec:authorize access="hasRole('ROLE_ADMIN')">--%>
-            <a>Ваш логин: <sec:authentication property="principal.username"/> </a>
-            <a>Ваш логин: <sec:authentication property="principal.password"/> </a>
-            <a><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></a>
-            <%--<p><a class="btn btn-lg btn-danger2" href="<c:url value="/service/getProductListJSON/PRICE" />" role="button">Выйти</a></p>--%>
 
+            <a>Ваш логин: <sec:authentication property="principal.username"/> </a>
+            <a><a class="btn btn-inverse" href="<c:url value="/logout" />" role="button">Выйти</a></a>
             <input type="text" id="search" name="search"/>
-            <a><a class="btn btn-danger" href="<c:url value="/main/getProductList" />" role="button">Поиск</a></a>
+            <a><a class="btn btn-inverse search-button" role="button">Поиск по товарам</a></a>
 
 
         </sec:authorize>
     </div>
-    <sec:authorize access="hasRole('ROLE_ADMIN')">
-        <div class="user-panelka">
-            <input type="submit" id="sub" value="Запустить">
-            <canvas id="buyers" width="600" height="400"></canvas>
-            <a><a class="btn btn-danger test-chart" role="button">test chart</a></a>
 
+    <%--CHART--%>
+<sec:authorize access="isAuthenticated()">
 
-        </div>
-        <div class="user-data">
-            <a><a class="btn btn-danger test-button" role="button">test</a></a>
-            <a><a class="btn btn-danger test-get-button" role="button">testGet</a></a>
-            <a><a class="btn btn-danger test-get-but" role="button">testGet2</a></a>
-            <a><a class="btn btn-danger selection-test" role="button">testGet2</a></a>
+    <div class="user-panelka">
+        <canvas id="visit-chart" width="600" height="400"></canvas>
 
-        </div>
-        <div class="user-details">
-
-        </div>
-    </sec:authorize>
-    <div id="testSelectable">
-        <ul>
-            <li>sadfsdagds</li>
-            <li>sadfsdagds</li>
-            <li>sadfsdagds</li>
-            <li>sadfsdagds</li>
-        </ul>
+        <a class="chart-buttons">
+            <a class="btn glyphicon glyphicon-signal show-chart" role="button">спрятать/показать</a>
+            <a class="btn glyphicon glyphicon-signal update-chart" role="button">статистика посещений</a>
+        </a>
     </div>
+</sec:authorize>
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
+
+        <%--CREATE USER--%>
+
+
+        <p><h1>Зарегистрировать Пользователя</h1></p>
+        <div id="create-user">
+            <input type="text" id="username" name="username"/>
+            <input type="password" id="password" name="password"/>
+            <div class="btn-group-vertical">
+                <!-- Кнопка с выпадающим меню -->
+                <div class="btn-group select-role">
+                    <button type="button" data-toggle="dropdown" class="btn btn-info dropdown-toggle">
+                        Укажите роль
+                        <span class="caret"></span>
+                    </button>
+                    <!-- Выпадающее меню -->
+                    <ul class="dropdown-menu">
+                        <!-- Пункты меню -->
+                        <li><a id="admin_role">Администратор</a></li>
+                        <li><a id="customer_role">Клиент</a></li>
+                        <li><a id="employee_role">Сотрудник</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p>
+                <a class="btn btn-success create-user-btn"  role="button">Создать</a>
+                <a class="btn btn-success save-user-btn"  role="button">Сохранить</a>
+            </p>
+
+        </div>
+
+        <div class="user-data">
+            <a><a class="btn btn-danger get-my-orders-button" role="button">Мои Заказы</a></a>
+            <a><a class="btn btn-danger get-my-cart" role="button">Моя Корзина</a></a>
+            <a><a class="btn btn-danger get-products" role="button">Товары</a></a>
+            <a><a class="btn btn-danger selection-test" role="button" onclick="proceedSelection(addToCart)">Добавить в корзину</a></a>
+            <a><a class="btn btn-danger get-orders" role="button">Заказы</a></a>
+        </div>
+        <div class="user-details"> </div>
+    </sec:authorize>
+
+    <sec:authorize access="isAuthenticated()">
     <h1>Akvelon Test Task</h1>
+    <div id="spacer-side">
+            <%--<a><a class="btn btn-danger save-details-button" role="button" onclick="updateItem()">Сохранить</a></a>--%>
+            <%--<a><a class="btn btn-danger delete-details-button" role="button">Удалить</a></a>--%>
+            <%--<a><a class="btn btn-danger new-details-button" role="button">Новый</a></a>--%>
+        <div id="details">
+            <div id="buttons">
+                   <a><a class="btn btn-danger make-order-button" role="button">Заказать</a>
+                    <%--<a><a class="btn btn-danger delete-button" role="button" onclick="proceedSelection(removeFromCart)">Удалить из корзины</a></a>--%>
+                    <%--<a><a class="btn btn-danger update-button" role="button">Сохранить</a></a></div>--%>
+                <table id="details-table" class="table table-hover">
+                </table>
+            </div>
+        </div>
     <div id="some_table">
-        <table id="data-table">
+        <table id="data-table" class="table table-hover">
             <thead>
-            <tr>
-                <th>Purcus</th>
-                <th>Hantis</th>
-                <th>Mastron</th>
-                <th>Jevicon</th>
-                <th>Lang</th>
-            </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>Gitsome</td>
-                <td>Some one</td>
-                <td>Take mose</td>
-                <td>Likbes</td>
-                <td>Racounter</td>
-            </tr>
-            <tr>
-                <td>Linkage</td>
-                <td>Fordor</td>
-                <td>Miad ron me</td>
-                <td>Diablo core</td>
-                <td>Tidbade</td>
-            </tr>
-            <tr>
-                <td>Hicura</td>
-                <td>Warecom</td>
-                <td>Xamicon</td>
-                <td>Yamama</td>
-                <td>Udoricano</td>
-            </tr>
-            <tr>
-                <td>Lavistaro</td>
-                <td>Micanorta</td>
-                <td>Ebloconte ma</td>
-                <td>Quad ri port</td>
-                <td>Timesquer</td>
-            </tr>
             </tbody>
         </table>
+
     </div>
-    <p class="lead">AKVELON</p>
 
     <div class="footer">
-        <p>&copy; Akvelon 2015</p>
+        <p>&copy; Akvelon 2016</p>
     </div>
+
+    </sec:authorize>
 </div>
 </body>
 </html>

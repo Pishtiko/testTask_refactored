@@ -21,8 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserService userService;
 
-    @PersistenceContext
-    EntityManager entityManager;
 
     @Autowired
     AdminDao adminDao;

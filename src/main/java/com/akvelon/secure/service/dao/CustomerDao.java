@@ -58,7 +58,8 @@ public class CustomerDao {
         final String query = "FROM Product WHERE productName LIKE" + " :SEARCHKEY"+ " ORDER BY productName "+order.name();
         products = (List<Product>) entityManager
                 .createQuery(query)
-                .setParameter("SEARCHKEY","%" + searchKey + "%");
+                .setParameter("SEARCHKEY","%" + searchKey + "%")
+                .getResultList();
         return products;
     }
 
@@ -81,7 +82,6 @@ public class CustomerDao {
     @Transactional
     public List<OrderProduct> getCartContent(String username) {
         UserCart uCart = entityManager.find(UserCart.class, username);
-        entityManager.refresh(uCart);
         if(uCart==null){
             uCart = new UserCart();
             uCart.setUserName(Helper.getCurrentUser());
@@ -117,21 +117,20 @@ public class CustomerDao {
 
 
     @Transactional
-    public boolean addToCart(Product productId, int count) {                    //  HAS MANY ISSUES
+    public boolean addToCart(int productId, int count) {                    //  HAS MANY ISSUES
         boolean hasErrors = false;
         try {
             OrderProduct op = new OrderProduct();
-            UserCart userCart = entityManager.find(UserCart.class, Helper.getCurrentUsersName());
+            UserCart userCart = getMyCart();
             OrderEntity oe = userCart.getOrderId();
-            op.setProductId(productId);
+            Product product = entityManager.find(Product.class, productId);
+            oe.setStatus(OrderStatus.IN_CART);
+            entityManager.flush();
+            op.setProductId(product);
             op.setCount(count);
-//            entityManager.persist(oe);
-//            entityManager.flush();
-//            entityManager.refresh(oe);
             op.setIdd(oe);
             entityManager.persist(op);
             entityManager.flush();
-
 
         } catch (Exception e) {
             hasErrors = true;
@@ -187,25 +186,26 @@ public class CustomerDao {
 
     @Transactional
     public List<OrderProduct> getOrderById(int orderId) {
-        String query = "FROM OrderProduct op WHERE op.idd = :orderId";
-        return entityManager.createQuery(query).setParameter(orderId, "orderId").getResultList();
+        String query = "FROM OrderProduct op WHERE op.idd.idd = :orderId";
+        return entityManager.createQuery(query).setParameter("orderId",orderId).getResultList();
     }
 
     @Transactional
     public List<OrderEntity> getOrderList() {
         List<OrderEntity> orders = null;
         orders = (List<OrderEntity>) entityManager
-                .createQuery("FROM OrderEntity");
+                .createQuery("FROM OrderEntity").getResultList();
         return orders;
     }
 
     @Transactional
     public List<OrderEntity> getOrdersOfCustomer(String userName) {
         List<OrderEntity> orders;
-        String query = "SELECT op.orderId FROM OrderEntity op WHERE op.userId = :userName";
+        String query = "SELECT oe FROM OrderEntity oe WHERE oe.userId.login = :userName";
         orders = (List<OrderEntity>) entityManager
                 .createQuery(query)
-                .setParameter(userName, userName);
+                .setParameter("userName", userName)
+                .getResultList();
         return orders;
     }
 
@@ -257,18 +257,19 @@ public class CustomerDao {
 
     @Transactional
     public boolean makeOrder() {
+        boolean hasErrors = false;
         try {
             UserCart cart = getMyCart();
             OrderEntity order = entityManager.find(OrderEntity.class, cart.getOrderId().getIdd());
             order.setStatus(OrderStatus.UNCONFIRMED);
             entityManager.merge(order);
             cart.setOrderId(null);
+            entityManager.merge(cart);
         }catch (Exception e){
             System.out.println("failed to purchas an order. "+e.getStackTrace());
+            hasErrors = true;
         }
-
-
-        throw new NotImplementedException();
+        return  hasErrors;
     }
 
     //  OTHER METHODS

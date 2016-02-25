@@ -48,6 +48,19 @@ public class RestControllerForAdmin {
         }
     }
 
+    @RequestMapping( value = "/updateUser/{userRole}", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateUser
+            (@RequestBody User user,
+             @PathVariable String userRole)
+    {
+        if (!adminDao.updateUser(user, userRole)) {
+            return "{\"status\":\"ok\"}";
+        } else {
+            return "{\"status\":\"not ok\"}";
+        }
+    }
+
     @RequestMapping( value = "/deleteUser/{userName}", method = RequestMethod.DELETE)
     @ResponseBody
     public String deleteUser (@PathVariable String userName)

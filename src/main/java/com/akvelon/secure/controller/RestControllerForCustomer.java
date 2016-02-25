@@ -59,9 +59,9 @@ public class RestControllerForCustomer {
 
     }
 
-    @RequestMapping( value = "/adToCart/{productId}/{count}", method = RequestMethod.GET)
+    @RequestMapping( value = "/addToCart/{productId}/{count}", method = RequestMethod.POST)
     @ResponseBody
-    public boolean addToCart(@PathVariable Product productId, @PathVariable int count){
+    public boolean addToCart(@PathVariable int productId, @PathVariable int count){
        return customerDao.addToCart(productId, count);
     }
 

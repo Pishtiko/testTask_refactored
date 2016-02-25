@@ -24,9 +24,9 @@ public class UserServiceImpl implements UserService {
         user = (User) entityManager
                 .createQuery(query)
                 .getSingleResult();
-        statisticsService.incrementStat(user);
-        System.out.println(user.toString());
-        System.out.println(user.getLogin().toString());
+        if(user!=null)
+            statisticsService.incrementStat(user);
+        System.out.println(user.getLogin().toString()+" logged in");
 
         return user;
     }

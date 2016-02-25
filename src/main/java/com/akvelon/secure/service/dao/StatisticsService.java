@@ -36,12 +36,36 @@ public class StatisticsService {
 //        final String query = "FROM StatisticEntity";
         final String query =
                 "USE [Temporary]" +
-                " SELECT "+
-                " CONVERT(date, t_timestamp) AS date_, "+
-                " COUNT( userName) AS usiqueUsers" +
-                " FROM StatisticEntity" +
-                " GROUP BY CONVERT(date, t_timestamp)" +
-                " ORDER By CONVERT(date, t_timestamp)";
+                        " SELECT "+
+                        " CONVERT(date, t_timestamp) AS date_, "+
+                        " COUNT( userName) AS Users" +
+                        " FROM StatisticEntity" +
+                        " GROUP BY CONVERT(date, t_timestamp)" +
+                        " ORDER By CONVERT(date, t_timestamp)";
+        List<Object> stats;
+
+
+        stats =  entityManager
+                .createNativeQuery(query)
+                .getResultList();
+//
+//        stats = (List<StatisticEntity>) entityManager
+//                .createQuery(query)
+//                .getResultList();
+        return stats;
+    }
+
+    @Transactional
+    public List<Object> getStatUnique() {
+//        final String query = "FROM StatisticEntity";
+        final String query =
+                "USE [Temporary]" +
+                        " SELECT "+
+                        " CONVERT(date, t_timestamp) AS date_, "+
+                        " COUNT(DISTINCT userName) AS uniqueUsers" +
+                        " FROM StatisticEntity" +
+                        " GROUP BY CONVERT(date, t_timestamp)" +
+                        " ORDER By CONVERT(date, t_timestamp)";
         List<Object> stats;
 
 
