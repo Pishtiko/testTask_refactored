@@ -73,13 +73,10 @@ $(document).ready(function(){
     $('.select-role li').click( function(){
         var arg = $(this);
         selectRole(arg);
-        console.log(this);
-        console.log($(this));
     });
     $('.create-user-btn').click(function(){
         var username = $('#create-user').find($('#username')).val();
         var password = $('#create-user').find($('#password')).val();
-        console.log(username, password);
         var user = {
             login: username,
             password: password
@@ -95,7 +92,6 @@ $(document).ready(function(){
     $('.save-user-btn').click(function(){
         var username = $('#create-user').find($('#username')).val();
         var password = $('#create-user').find($('#password')).val();
-        console.log(username, password);
         var user = {
             login: username,
             password: password
@@ -234,10 +230,7 @@ function init(){
 
 }
 function proceedSelection(callback){
-    console.log(selected);
-    //var sel = $('.alert-danger tr');
     $.each(selected, function(index, obj){
-        console.log(obj);
         var i = 1;
         if(i===1){
             for(var key in obj){
@@ -258,16 +251,11 @@ function selectFromTable(context){
 
 
     for (var index = 0; index < tdArray.length; index++){
-        //console.log(thArray.eq(index).text());
         currentEntity[thArray.eq(index).text()] = tdArray.eq(index).text();
     }
-    //console.log(currentEntity.status);
-    //console.log(JSON.stringify(currentEntity));
-    index = kkey;
     if (kkey!==undefined)
     {
         context.toggleClass("alert-danger");
-        //console.log(index);
     }
     if (context.hasClass('alert-danger')) {
         selected.push({
@@ -289,7 +277,6 @@ function selectRole(arg){
     var dropdown = arg.parent().siblings(param);
     if (selected === 'admin_role') {
         userRole = "ROLE_ADMIN";
-        console.log(dropdown.html());
         dropdown.html("Администратор"+"<span class='caret'></span>");
     } else if (selected === 'customer_role') {
         userRole = "ROLE_CUSTOMER";
@@ -298,12 +285,10 @@ function selectRole(arg){
         userRole = "ROLE_EMPLOYEE";
         dropdown.html("Сотрудник"+"<span class='caret'></span>");
     }
-    console.log(selected);
 }
 
 //TEST
 function getTest(){
-    //console.log(self);
     var URL = rootURL+"/main/getProductList/price";
     ajaxGET(URL);
 
@@ -353,7 +338,6 @@ function renderItem(item, container, containerType){
         innerPrefix = "<input type=\"text\" id=\"editable\" name=\"";
         innerSuffix = "/\">";
     }
-    console.log(item);
     var i = 1;
     for(var key in item) {
         if (i<1){
@@ -377,7 +361,6 @@ function renderItem(item, container, containerType){
             //if(containerType!=="editable"){
             var obb = 0;
             obb = item[key];
-            console.log(obb);
             var ob = new Date(obb);
             obj = ob.getDate()+","+ob.getMonth()+","+ob.getFullYear();
             if(containerType!=="editable")
@@ -399,11 +382,9 @@ function renderItem(item, container, containerType){
 function renderTable(data) {
 
     $tableBody.html("");
-    console.log(window.$tableBody.html());
     renderTableHeader(data[0]);
     for (var index = 0; index < data.length; index++) {
         renderItemToTable(data[index]);
-        console.log(data[index]);
     }
     $('#data-table tr').click(function () {
         selectFromTable($(this));
@@ -413,24 +394,14 @@ function renderTable(data) {
     });
 }
 function renderDetails(context, currentEntity) {
-    console.log(currentEntity);
     for (var key in currentEntity){
         context.html("");
         renderItem(currentEntity,context,"editable");
     }
-       /* if(currentEntity.productName === undefined) {
-            console.log("reached 2?");
-            if (currentEntity.idd!==undefined && currentEntity.orderId ===undefined)
-                if(currentEntity.idd!==undefined){
-                    console.log("reached>3?");
-                    renderItem(data,context,"editable");
-                    //renderItem(currentEntity, context, "editable");
-                }
-        }*/
+
 }
 
 function ajaxGET(URL){
-    //console.log(self);
     $.ajax({
         type: 'GET',
         url: URL,
@@ -439,7 +410,6 @@ function ajaxGET(URL){
     });
 }                   //TODO: CHECK FOR ISSUES
 function ajaxGET2(URL, callback){
-    //console.log(self);
     $.ajax({
         type: 'GET',
         url: URL,
@@ -448,7 +418,6 @@ function ajaxGET2(URL, callback){
     });
 }
 function ajaxGET3(URL){
-    //console.log(self);
     var returnable = [];
     $.ajax({
         type: 'GET',
@@ -459,7 +428,6 @@ function ajaxGET3(URL){
     return returnable;
 }
 function ajaxPOST(URL){
-    console.log(self);
     $.ajax({
         type: 'POST',
         url: URL,
@@ -481,7 +449,6 @@ function ajaxPUT(URL, object){
     });
 }             //TODO: CHECK FOR ISSUES
 function ajaxDELETE(URL){
-    console.log(self);
     $.ajax({
         type: 'GET',
         url: URL,
@@ -558,7 +525,6 @@ function getOrderList(){
     ajaxGET(URL);
 }
 function getOrderById(orderId, callback){
-    console.log("reached ajax");
     var URL = rootURL+employee+"/getOrderById/"+orderId;
     ajaxGET3(URL);
     return ajaxGET3(URL);
@@ -583,17 +549,6 @@ function confirmOrder(orderId){
 
 
 
-function findAll() {
-
-    console.log('findAll');
-    $.ajax({
-        type: 'GET',
-        url: "http://localhost:8083/TestTaskWS/service/getProductListJSON/PRICE",
-        dataType: "json", // data type of response
-        success: renderList
-    });
-}
-
 function renderList(data) {
     // JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
     var list = data == null ? [] : (data instanceof Array ? data : [data]);
@@ -604,51 +559,11 @@ function renderList(data) {
     });
 }
 
-function findByName(searchKey) {
-    console.log('findByName: ' + searchKey);
-    $.ajax({
-        type: 'GET',
-        url: rootURL + '/search/findByNameContaining?name=' + searchKey,
-        dataType: "json",
-        success: renderList
-    });
-}
 
 
-
-function addHotel() {
-    console.log(formToJSON());
-    $.ajax({
-        type: 'POST',
-        contentType: 'application/json',
-        url: rootURL,
-        dataType: "json",
-        data: formToJSON(),
-        success: function(data, textStatus, jqXHR) {
-            alert('Hotel created successfully');
-            $('#btnDelete').show();
-            //$('#hotelId').val(data.id);
-            findAll();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR.status);
-            // Fix a bug in JQuery: 201 means the insert succeeded!
-            if (jqXHR.status === 201) {
-                alert('Hotel created successfully');
-                $('#btnDelete').show();
-                //$('#hotelId').val(data.id);
-                findAll();
-            }
-            else {
-                alert('addHotel error: ' + textStatus);
-            }
-        }
-    });
-}
 
 
 function updateItem(URL) {
-    console.log('updateHotel');
     $.ajax({
         type: 'PATCH',
         contentType: 'application/json',
@@ -666,21 +581,6 @@ function updateItem(URL) {
 
 }
 
-function deleteHotel() {
-    console.log('deleteHotel');
-    $.ajax({
-        type: 'DELETE',
-        url: rootURL + '/' + $('#hotelId').val(),
-        success: function(data, textStatus, jqXHR) {
-            alert('Hotel deleted successfully');
-            findAll();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('deleteHotel error');
-        }
-    });
-}
-
 
 
 // Helper function to serialize all the form fields into a JSON string
@@ -693,44 +593,3 @@ function formToJSON(formDivPointer) {
 
     return JSON.stringify(output);
 }
-
-// TRASH
-//function renderProductList(data){
-//
-//function findById(self) {
-//    console.log(self);
-//    $.ajax({
-//        type: 'GET',
-//        url: rootURL + "getProductById/"+self,
-//        dataType: "json",
-//        success: function(data, textstatus) {
-//            $('#btnDelete').show();
-//            console.log('findById success: ' + data.product.productName);
-//
-//            currentEntity = data.product;
-//            renderDetails(currentEntity);
-//        }
-//    });
-//}
-//    $.each(data, function(index, object) {
-//        $('#data-table').find('>tbody').append('<tr id ="'+object.productId+'"></tr>');
-//        var output = "";
-//        output+="<td>";
-//        output+=object.productId;
-//        output+="</td>";
-//        output+="<td>";
-//        output+=object.productName;
-//        output+="</td>";
-//
-//        $('#data-table').find('> tbody > tr:last').append(output);
-//    });
-//
-//}
-//var id = currentEntity.ProductId;
-//var idx = id.lastIndexOf("/");
-//id = id.substring(idx+1);
-//console.log(item[key]);
-//console.log(key);
-//console.log($tableBody);
-//console.log($tableBody.val());
-//console.log($tableBody.html());
