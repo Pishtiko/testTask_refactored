@@ -1,9 +1,6 @@
 package com.akvelon.secure.service.dao;
 
-import com.akvelon.secure.entity.OrderEntity;
-import com.akvelon.secure.entity.OrderProduct;
-import com.akvelon.secure.entity.Product;
-import com.akvelon.secure.entity.UserCart;
+import com.akvelon.secure.entity.*;
 import com.akvelon.secure.entity.enums.OrderStatus;
 import com.akvelon.secure.service.dao.enums.ORD;
 import com.akvelon.secure.util.Helper;
@@ -69,7 +66,8 @@ public class CustomerDao {
 
     @Transactional
     public UserCart getCart(String username) {
-        UserCart userCart = entityManager.find(UserCart.class, username);
+        User user = entityManager.find(User.class, username);
+        UserCart userCart = entityManager.find(UserCart.class, user);
         if(userCart.getOrderId()==null){
             OrderEntity orderEntity = new OrderEntity();
             entityManager.persist(orderEntity);
@@ -124,6 +122,7 @@ public class CustomerDao {
             UserCart userCart = getMyCart();
             OrderEntity oe = userCart.getOrderId();
             Product product = entityManager.find(Product.class, productId);
+            oe.setUserId(Helper.getCurrentUser());
             oe.setStatus(OrderStatus.IN_CART);
             entityManager.flush();
             op.setProductId(product);
