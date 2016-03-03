@@ -51,11 +51,7 @@ public class OrderEntity implements Serializable {
 
     public int getIdd() { return idd; }
     public void setIdd(int idd) {  this.idd = idd; }
-//
-//    public OrderProduct getOrderId() {   return orderId;   }
-//    public void setOrderId(OrderProduct orderId) {
-//        this.orderId = orderId;
-//    }
+
 
     public User getUserId() {
         return userId;

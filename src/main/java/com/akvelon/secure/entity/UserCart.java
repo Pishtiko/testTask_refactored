@@ -42,5 +42,13 @@ public class UserCart implements Serializable {
     }
 
 
+    @Override
+    public int hashCode() {
+        return userName.hashCode();
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        return userName.equals(obj);
+    }
 }

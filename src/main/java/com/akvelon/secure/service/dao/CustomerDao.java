@@ -67,12 +67,15 @@ public class CustomerDao {
     @Transactional
     public UserCart getCart(String username) {
         User user = entityManager.find(User.class, username);
-        UserCart userCart = entityManager.find(UserCart.class, user);
+        UserCart uc = new UserCart(user, null);
+        UserCart userCart = entityManager.find(UserCart.class, uc);
         if(userCart.getOrderId()==null){
             OrderEntity orderEntity = new OrderEntity();
             entityManager.persist(orderEntity);
             entityManager.flush();
             userCart.setOrderId(orderEntity);
+            entityManager.merge(userCart);
+            entityManager.flush();
         }
         return userCart;
     }
@@ -259,13 +262,13 @@ public class CustomerDao {
         boolean hasErrors = false;
         try {
             UserCart cart = getMyCart();
-            OrderEntity order = entityManager.find(OrderEntity.class, cart.getOrderId().getIdd());
+            OrderEntity order = cart.getOrderId();
             order.setStatus(OrderStatus.UNCONFIRMED);
-            entityManager.merge(order);
+            entityManager.persist(order);
             cart.setOrderId(null);
-            entityManager.merge(cart);
+            entityManager.persist(cart);
         }catch (Exception e){
-            System.out.println("failed to purchas an order. "+e.getStackTrace());
+            System.out.println("failed to purchase an order. "+e);
             hasErrors = true;
         }
         return  hasErrors;
