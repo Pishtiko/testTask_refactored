@@ -267,7 +267,7 @@ public class CustomerDao {
 
 
     @Transactional
-    public List<OrderProduct> orderDetails(int orderId) {                                       // TODO: CHECK
+    public List<OrderProduct> orderDetails(int orderId) {
         final String queryOp = "SELECT op FROM OrderProduct op WHERE op.idd.idd = :orderId";
         List<OrderProduct> ops = entityManager.createQuery(queryOp)
                 .setParameter("orderId", orderId)

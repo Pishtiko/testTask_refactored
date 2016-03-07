@@ -32,15 +32,15 @@
                         <table class="table table-filter" style= "overflow: scroll">
                             <thead>
                             <tr>
-                                <th><h1>Товар</h1></th>
-                                <th><h1>Описание</h1></th>
-                                <th><h1>Стоимомть</h1></th>
+                                <th ng-click="mainCtrl.setSortType('productName')">Товар</th>
+                                <th ng-click="mainCtrl.setSortType('description')">Описание</th>
+                                <th ng-click="mainCtrl.setSortType('price')">Стоимомть</th>
                             </tr>
                             </thead>
                             <tbody class="carousel">
 
                             <tr data-status="pendiente"
-                                ng-repeat="product in productsCtrl.products()">
+                                ng-repeat="product in productsCtrl.products() | orderBy:ord:sortReverse">
                                 <td>
                                     <div class="ckbox">
                                         <input type="checkbox" id="checkbox3">

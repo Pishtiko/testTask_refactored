@@ -40,7 +40,7 @@ app.factory('ordersFactory', function ($http, $rootScope) {
     service.getOrders = function () {
         return orders;
     };
-    service.getOrderDetails = function (order) {       //TODO: Implement
+    service.getOrderDetails = function (order) {
         console.log("updating details");
         $http.get(URL.GET_DETAILS + order.idd)
             .success(function (response) {

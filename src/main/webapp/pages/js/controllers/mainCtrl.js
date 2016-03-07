@@ -1,18 +1,29 @@
 app.controller('mainCtrl', function($scope){
     if($scope.ord===undefined){
         $scope.ord = "productName";
-        console.log($scope.ord)
     }
     if($scope.showWithStatus===undefined){
         $scope.showWithStatus = "UNCONFIRMED";
-        console.log($scope.showWithStatus);
+    }
+    if($scope.ord===undefined){
+        $scope.sortReverse = false;
     }
     this.setShownStatus = function(status){
         $scope.showWithStatus = status;
-        console.log($scope.showWithStatus);
     };
     this.setPage = function(page){
-        console.log(page);
         $scope.pagePart = page;
+    };
+    this.setSortReverse = function(sortReverse){
+        $scope.sortReverse = sortReverse;
+    };
+    this.setSortType = function(sortType){
+        if($scope.ord===sortType){
+            $scope.sortReverse = !$scope.sortReverse;
+        }
+        else {
+            $scope.sortReverse = false;
+            $scope.ord = sortType;
+        }
     };
 });

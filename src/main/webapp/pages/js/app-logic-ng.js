@@ -183,14 +183,15 @@ function ajaxGET(URL) {
             renderTable(data);
         }
     });
-    function ajaxGET2(URL, callback) {
-        $.ajax({
-            type: 'GET',
-            url: URL,
-            dataType: "json",
-            success: function (data) {
-                callback(data);
-            }
-        });
-    }
+};
+function ajaxGET2(URL, callback) {
+    $.ajax({
+        type: 'GET',
+        url: URL,
+        dataType: "json",
+        success: function (data) {
+            callback(data);
+        }
+    });
+
 };
