@@ -56,7 +56,7 @@ public class TestMyRest {
     @RequestMapping( value = "/testView", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<View_1> testView() throws NoSuchFieldException, IllegalAccessException {
-      String query = "FROM View_1";
+      final String query = "FROM View_1";
         return entityManager.createQuery(query).getResultList();
 
     }

@@ -1,0 +1,37 @@
+<tbody>
+<tr data-status="pagado"
+    ng-repeat="orderProduct in ordersCtrl.getDetails()">
+    <td>
+        <div class="ckbox">
+            <input type="checkbox" id="checkbox3">
+            <label for="checkbox3"></label>
+        </div>
+    </td>
+    <td>
+        <a href="#" class="pull-left">
+        </a>
+    </td>
+    <td>
+        <div class="media">
+            <a href="#" class="pull-left">
+                <img src="pages/resource/cart.png"
+                     class="media-photo">
+            </a>
+            <div class="media-body">
+                                            <span class="media-meta pull-right">
+                                                <input type="text" ng-model="orderProduct.count">
+                                            </span>
+                <h4 class="title">
+                    {{orderProduct.productId.productName}}
+                    <span class="pull-right pendiente">(Pendiente)</span>
+                </h4>
+                <p class="summary">
+                    {{orderProduct.productId.price}}*{{orderProduct.count}}={{orderProduct.count*orderProduct.productId.price}}
+                    $</p>
+            </div>
+        </div>
+    </td>
+</tr>
+
+
+</tbody>

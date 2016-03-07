@@ -118,9 +118,7 @@ public class CustomerDao {
 
 
     @Transactional
-    public boolean addToCart(int productId, int count) {                    //  HAS MANY ISSUES
-        boolean hasErrors = false;
-        try {
+    public int addToCart(int productId, int count) {                    //  HAS MANY ISSUES
             OrderProduct op = new OrderProduct();
             UserCart userCart = getMyCart();
             OrderEntity oe = userCart.getOrderId();
@@ -132,29 +130,51 @@ public class CustomerDao {
             op.setCount(count);
             op.setIdd(oe);
             entityManager.persist(op);
-            entityManager.flush();
-
-        } catch (Exception e) {
-            hasErrors = true;
-        }
-        return hasErrors;
+            return op.getOrderId();
     }
 
     @Transactional
-    public boolean removeFromCart(Product productId) {
+    public boolean removeFromCart(int orderId) {
         boolean hasErrors = false;
         try {
-        List<OrderProduct> orderProducts = getMyCartContent();
-        for (OrderProduct op: orderProducts  ) {
-            if(op.getProductId()==productId)
+            OrderProduct op = entityManager.find(OrderProduct.class, orderId);
+            if(op.getIdd() == getMyCart().getOrderId()){
                 entityManager.remove(op);
-        }
+            }
 
         }catch (Exception e){
             System.out.println(e+" while removing from the cart");
         }
         return hasErrors;
+    }
 
+//    @Transactional
+//    public boolean removeFromCart(int productId) {
+//        boolean hasErrors = false;
+//        try {
+//            Product product = entityManager.find(Product.class, productId);
+//        List<OrderProduct> orderProducts = getMyCartContent();
+//            orderProducts.stream().filter(op -> op.getProductId() == product).forEach(op -> entityManager.remove(op));
+//
+//        }catch (Exception e){
+//            System.out.println(e+" while removing from the cart");
+//        }
+//        return hasErrors;
+//    }
+
+    @Transactional
+    public boolean updateCart(List<OrderProduct> newCart) {
+        boolean hasErrors = false;
+        try {
+            for (OrderProduct op : newCart){
+                entityManager.merge(op);
+            }
+
+        }catch (Exception e){
+            hasErrors = true;
+            System.out.println("failed to save. "+e);
+        }
+        return hasErrors;
     }
 
     @Transactional
@@ -247,13 +267,13 @@ public class CustomerDao {
 
 
     @Transactional
-    public List<Product> orderDetails(int orderId) {                                       // TODO: CHECK
-        String queryOp = "SELECT op FROM OrderProduct op WHERE op.idd.idd = :orderId";
+    public List<OrderProduct> orderDetails(int orderId) {                                       // TODO: CHECK
+        final String queryOp = "SELECT op FROM OrderProduct op WHERE op.idd.idd = :orderId";
         List<OrderProduct> ops = entityManager.createQuery(queryOp)
                 .setParameter("orderId", orderId)
                 .getResultList();
-        List<Product> result = ops.stream().map(OrderProduct::getProductId).collect(Collectors.toList());
-        return result;
+//        List<Product> result = ops.stream().map(OrderProduct::getProductId).collect(Collectors.toList());
+        return ops;
 
     }
 
@@ -281,13 +301,14 @@ public class CustomerDao {
     public boolean saveOrder(OrderEntity order) {
         boolean hasErrors = false;
         try {
-            entityManager.persist(order);
+            entityManager.merge(order);
         } catch (Exception e) {
             hasErrors = true;
         }
 
         return hasErrors;
     }
+
 
 
 }

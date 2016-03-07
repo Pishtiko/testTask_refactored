@@ -9,10 +9,7 @@ import com.akvelon.secure.util.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
@@ -52,23 +49,35 @@ public class RestControllerForCustomer {
 
     // ACTIONS WITH CART
 
+    @RequestMapping( value = "/getMyCart", method = RequestMethod.GET)
+    @ResponseBody
+    public OrderEntity getCartId() {
+        return customerDao.getMyCart().getOrderId();
+    }
+
     @RequestMapping( value = "/getCartContent", method = RequestMethod.GET)
     @ResponseBody
-    public List<OrderProduct> getCart() {
+    public List<OrderProduct> getCartContent() {
         return customerDao.getCartContent(Helper.getCurrentUsersName());
 
     }
 
     @RequestMapping( value = "/addToCart/{productId}/{count}", method = RequestMethod.POST)
     @ResponseBody
-    public boolean addToCart(@PathVariable int productId, @PathVariable int count){
+    public int addToCart(@PathVariable int productId, @PathVariable int count){
        return customerDao.addToCart(productId, count);
+    }
+
+    @RequestMapping( value = "/updateCart", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean updateCart(@RequestBody List<OrderProduct> newCart){
+        return customerDao.updateCart(newCart);
     }
 
     @RequestMapping( value = "/removeFromCart/{productId}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean removeFromCart(@PathVariable Product producId) {
-        return customerDao.removeFromCart(producId);
+    public boolean removeFromCart(@PathVariable int productId) {
+        return customerDao.removeFromCart(productId);
     }
 
     @RequestMapping( value = "/cleanTheCart", method = RequestMethod.GET)               //NOT IMPLEMENTED
@@ -87,7 +96,7 @@ public class RestControllerForCustomer {
 
     @RequestMapping( value = "/orderDetails/{orderId}", method = RequestMethod.GET)     // Think about security  -  Check if OrderId is of current Customer's Orders.
     @ResponseBody
-    public List<Product> orderDetails(@PathVariable int orderId) {
+    public List<OrderProduct> orderDetails(@PathVariable int orderId) {
         return customerDao.orderDetails(orderId);
     }
 

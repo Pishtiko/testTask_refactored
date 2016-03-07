@@ -1,0 +1,66 @@
+<div class="row"
+     ng-controller="cartCtrl as cartCtrl">
+    <section class="content">
+        <h1>Корзина</h1>
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="pull-right">
+                            <button type="button" class="btn btn-success" ng-click="cartCtrl.makeOrder()">
+                               Заказать
+                            </button>
+                            <button type="button" class="btn btn-warning" ng-click="cartCtrl.saveCart()">
+                                Сохранить
+                            </button>
+                            <button type="button" class="btn btn-danger" ng-click="cartCtrl.cleanTheCart()">
+                                Удалить Все
+                            </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table table-filter">
+                            <tbody>
+
+                            <tr
+                            ng-repeat="orderProduct in cartCtrl.getMyCartContent() track by orderProduct.orderId"
+                            ng-controller="cartCtrl as cartCtrl">
+                                <td>
+                                    <div class="ckbox">
+                                        <input type="checkbox" id="checkbox3">
+                                        <label for="checkbox3"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="#" class="pull-left"
+                                    ng-click="cartCtrl.removeFromCart(orderProduct)">
+                                        <img src="pages/resource/delete.png"
+                                             class="media-photo">
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="media">
+                                        <a href="#" class="pull-left">
+                                            <img src="pages/resource/cart.png"
+                                                 class="media-photo">
+                                        </a>
+                                        <div class="media-body">
+                                            <span class="media-meta pull-right">
+                                                <input type="text" ng-model="orderProduct.count">
+                                            </span>
+                                            <h4 class="title">
+                                                {{orderProduct.productId.productName}}
+                                                <span class="pull-right pendiente">(Pendiente)</span>
+                                            </h4>
+                                            <p class="summary">{{orderProduct.productId.price}}*{{orderProduct.count}}={{orderProduct.count*orderProduct.productId.price}} $</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

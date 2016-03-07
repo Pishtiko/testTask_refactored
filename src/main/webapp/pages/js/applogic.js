@@ -213,6 +213,9 @@ function updateChart(data,datasetNumber){
     })
 
 }
+function toggleButtonView(){
+
+}
 
 
 
@@ -291,7 +294,10 @@ function selectRole(arg){
 function getTest(){
     var URL = rootURL+"/main/getProductList/price";
     ajaxGET(URL);
-
+}
+function getProductList2(){
+    var URL = rootURL+customer+"/getProductList/"+pop;
+    ajaxGET3(URL);
 }
 
 //Render Data
