@@ -28,19 +28,20 @@ app.controller('ordersCtrl', function($scope, ordersFactory){
     };
 
     //Button Handlers
-    this.confirmOrder = function(order){
-        ordersFactory.confirmOrder(order);
-        this.currentOrder = 'CONFIRMED';
+    this.confirmOrder = function(){
+        ordersFactory.confirmOrder(this.currentOrder);
+        this.currentOrder.status = 'CONFIRMED';
+    };
+    this.cancel = function(){
+        ordersFactory.cancel(this.currentOrder);
+        this.currentOrder = 'CANCELED';
     };
     this.backButtonHandler = function(){
         $scope.detailsShown = false;
         this.currentOrder = {};
         //table.html(oldTableContent);
     };
-    this.cancel = function(order){
-        ordersFactory.cancel(order);
-        this.currentOrder = 'CANCELED';
-    };
+
 });
 
 app.filter('dateFilter', function(){
