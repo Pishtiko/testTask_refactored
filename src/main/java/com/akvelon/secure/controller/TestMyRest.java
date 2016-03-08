@@ -9,7 +9,6 @@ import com.akvelon.secure.service.dao.*;
 import com.akvelon.secure.util.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +54,8 @@ public class TestMyRest {
 
     @RequestMapping( value = "/testView", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<View_1> testView() throws NoSuchFieldException, IllegalAccessException {
-      final String query = "FROM View_1";
+    public List<TotalSalaryView> testView() throws NoSuchFieldException, IllegalAccessException {
+      final String query = "FROM TotalSalary";
         return entityManager.createQuery(query).getResultList();
 
     }
@@ -118,7 +117,6 @@ public class TestMyRest {
             product.setPrice(10+i);
             entityManager.persist(product);
             entityManager.refresh(product);
-//            customerDao.addToCart(product, 5);
         }
         entityManager.flush();
         List<Product> produkti = customerDao.getProductListByParam("Price");
@@ -131,31 +129,15 @@ public class TestMyRest {
             orderEntity.setStatus(OrderStatus.UNCONFIRMED);
             entityManager.persist(orderEntity);
             entityManager.flush();
-//            entityManager.refresh(orderEntity);
             op12.setIdd(orderEntity);
             op12.setProductId(pr12);
             op12.setCount(5);
             entityManager.persist(op12);
             entityManager.flush();
-//            entityManager.refresh(op12);
-//            customerDao.addToCart(pr12, 5);
             entityManager.flush();
-//            customerDao.removeFromCart(pr12);
         }
         entityManager.flush();
         entityManager.close();
-        /*
-        List<OrderProduct> ops12 = opDao.getList(OrderProduct.class);
-       for (OrderProduct opa12 : ops12){
-            OrderEntity orderok = new OrderEntity();
-//            orderok.setOrderId(opa12);
-            orderok.setUserId(adminDao.getUserById(Helper.getCurrentUsersName()));
-            orderok.setStatus(OrderStatus.CONFIRMED);
-            ordDao.persistEntity(orderok);
-//            entityManager.flush();
-            entityManager.close();
-//            break;
-        }*/
     }
 
     @RequestMapping( value = "/getCartT", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -175,33 +157,6 @@ public class TestMyRest {
         return "АйАйАй";
     }
 
-    @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "/azaza", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String azaza(){
-        return Helper.getCurrentUsersName().toString();
-    }
-
-    @RequestMapping(value = "/poisk", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String poisk(){
-        String result = new String();
-        List<Product> rr = prDao.searchFor("productName","Ga", Product.class);
-        for (Product p:rr ) {
-            result+=p.getProductName().toString();
-        }
-        String finalResult = result.toString();
-        System.out.println(result.toString());
-        return result;
-    }
-
-    @RequestMapping( value = "/tValenka", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<Product> tValenka() {
-        System.out.println("первый попал");
-        return customerDao.getProductListByParam("price");
-    }
-
 
     @RequestMapping( value = "/testMest}", method = RequestMethod.GET)
     @ResponseBody
@@ -217,7 +172,6 @@ public class TestMyRest {
         return customUser.getLogin().toString();
     }
 
-//    @Secured({"ADMIN"})
     @RequestMapping(value = "/poisk1", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Product> poisk1(){

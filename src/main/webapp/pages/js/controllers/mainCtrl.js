@@ -3,7 +3,7 @@ app.controller('mainCtrl', function($scope){
         $scope.ord = "productName";
     }
     if($scope.showWithStatus===undefined){
-        $scope.showWithStatus = "UNCONFIRMED";
+        $scope.showWithStatus = "*";
     }
     if($scope.ord===undefined){
         $scope.sortReverse = false;

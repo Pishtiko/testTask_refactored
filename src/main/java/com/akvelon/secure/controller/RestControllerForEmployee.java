@@ -53,7 +53,7 @@ public class RestControllerForEmployee {
         return dao.getOrdersOrderedByParam("userId", id);
     }
 
-    @RequestMapping( value = "/confirmOrder/{orderId}", method = RequestMethod.GET)
+    @RequestMapping( value = "/confirmOrder/{orderId}", method = RequestMethod.POST)
     @ResponseBody
     public String confirmOrder(@PathVariable int orderId)
     {
@@ -93,7 +93,7 @@ public class RestControllerForEmployee {
         return resultStatus;
     }
 
-    @RequestMapping( value = "/cancelOrder/{orderId}", method = RequestMethod.GET)
+    @RequestMapping( value = "/cancelOrder/{orderId}", method = RequestMethod.POST)
     @ResponseBody
     public boolean cancelOrder(@PathVariable int orderId)
     {

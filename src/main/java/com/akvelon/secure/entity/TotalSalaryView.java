@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="View_1")
-public class View_1 {
+@Table(name="TotalSalary")
+public class TotalSalaryView {
 
     @Id
     @Column
