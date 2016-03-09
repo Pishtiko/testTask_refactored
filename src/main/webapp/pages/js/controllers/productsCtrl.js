@@ -1,4 +1,4 @@
-app.controller('productsCtrl', function (productsFactory, cartFactory) {
+app.controller('productsCtrl', function (productsFactory, cartFactory, $scope) {
 
     //VARS
     this.searchInput = "";
@@ -6,8 +6,8 @@ app.controller('productsCtrl', function (productsFactory, cartFactory) {
 
     this.orderBy = [
         {
-        name: "цене",
-        value: "price"
+            name: "цене",
+            value: "price"
         },
         {
             name: "названию",
@@ -21,6 +21,8 @@ app.controller('productsCtrl', function (productsFactory, cartFactory) {
     };
     this.find = function(){
         productsFactory.find(this.searchInput);
+            $scope.searchResult = this.searchInput;
+            this.searchInput = "";
     };
     this.delete = function(id){
         productsFactory.delete(id);
@@ -37,7 +39,16 @@ app.filter('moneyFilter', function(){
     }
 });
 
-
+app.filter('searchResultFilter', function () {
+    return function (searchKey) {
+        if (searchKey === "") {
+            return "все товары"
+        }
+        else {
+            return "товары по запросу: \"" + searchKey+"\"";
+        }
+    }
+});
 
 app.filter('startsWithA', function () {
     return function (items) {

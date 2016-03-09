@@ -15,7 +15,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.List;
 
 @Controller
-@Secured(value = {"ROLE_CUSTOMER", "ROLE_ADMIN"})
+@Secured(value = {"ROLE_CUSTOMER", "ROLE_EMPLOYEE", "ROLE_ADMIN"})
 @RequestMapping(value = "/main")
 public class RestControllerForCustomer {
 
@@ -44,7 +44,7 @@ public class RestControllerForCustomer {
     {
         if(pop=="desc")
         return customerDao.findProductsByName(searchKey, ORD.DESC);
-        else return customerDao.findProductsByName(searchKey, ORD.ASC);
+        else return customerDao.findProductsByNameOrDescription(searchKey, ORD.ASC);
     }
 
     // ACTIONS WITH CART

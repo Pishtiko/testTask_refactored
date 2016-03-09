@@ -9,6 +9,7 @@
                     <div class="pull-right">
 
                         <form ng-submit='productsCtrl.find()'>
+                            <a>Показаны {{searchResult | searchResultFilter}}</a>
                             <button type="button" class="btn btn-success " ng-click="productsCtrl.find()">Поиск</button>
                             <input type='text' title = "поиск"
                                    ng-model='productsCtrl.searchInput'>

@@ -55,7 +55,7 @@ public class TestMyRest {
     @RequestMapping( value = "/testView", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<TotalSalaryView> testView() throws NoSuchFieldException, IllegalAccessException {
-      final String query = "FROM TotalSalary";
+      final String query = "FROM SQL Server (Microsoft) - Temporary@localhostTotalSalary";
         return entityManager.createQuery(query).getResultList();
 
     }

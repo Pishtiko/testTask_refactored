@@ -60,6 +60,18 @@ public class CustomerDao {
         return products;
     }
 
+    @Transactional
+    public List<Product> findProductsByNameOrDescription(String searchKey, ORD order)
+    {
+        List<Product> products = null;
+        final String query = "FROM Product WHERE productName LIKE :SEARCHKEY OR description LIKE" + " :SEARCHKEY"+ " ORDER BY productName "+order.name();
+        products = (List<Product>) entityManager
+                .createQuery(query)
+                .setParameter("SEARCHKEY","%" + searchKey + "%")
+                .getResultList();
+        return products;
+    }
+
 
     //  ACTIONS WITH CART
 
@@ -148,19 +160,6 @@ public class CustomerDao {
         return hasErrors;
     }
 
-//    @Transactional
-//    public boolean removeFromCart(int productId) {
-//        boolean hasErrors = false;
-//        try {
-//            Product product = entityManager.find(Product.class, productId);
-//        List<OrderProduct> orderProducts = getMyCartContent();
-//            orderProducts.stream().filter(op -> op.getProductId() == product).forEach(op -> entityManager.remove(op));
-//
-//        }catch (Exception e){
-//            System.out.println(e+" while removing from the cart");
-//        }
-//        return hasErrors;
-//    }
 
     @Transactional
     public boolean updateCart(List<OrderProduct> newCart) {
@@ -241,11 +240,6 @@ public class CustomerDao {
     public List<OrderEntity> getOrdersOrderedByParam(String selectParam, String value) {
 
         List<OrderEntity> orders = orderDao.searchFor(selectParam, value, OrderEntity.class);
-     /*   List<OrderEntity> orders = null;
-        String query = "FROM OrderEntity WHERE " + selectParam + "= :" + selectParam;
-        orders = (List<OrderEntity>) entityManager
-                .createQuery(query)
-                .setParameter(selectParam, Integer.parseInt(value));*/
         return orders;
     }
 
@@ -272,7 +266,6 @@ public class CustomerDao {
         List<OrderProduct> ops = entityManager.createQuery(queryOp)
                 .setParameter("orderId", orderId)
                 .getResultList();
-//        List<Product> result = ops.stream().map(OrderProduct::getProductId).collect(Collectors.toList());
         return ops;
 
     }

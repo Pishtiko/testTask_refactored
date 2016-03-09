@@ -36,7 +36,7 @@ app.factory('productsFactory', ['$http', '$rootScope',  function ($http, $rootSc
                 console.log(response);
         });
         }
-        //return products;
+        return searchRequest(searchInput);
     };
 
     return service;

@@ -8,6 +8,9 @@ app.controller('mainCtrl', function($scope){
     if($scope.ord===undefined){
         $scope.sortReverse = false;
     }
+    if($scope.searchResult===undefined){
+        $scope.searchResult = "";
+    }
     this.setShownStatus = function(status){
         $scope.showWithStatus = status;
     };
