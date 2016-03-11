@@ -3,7 +3,7 @@ app.controller('productsCtrl', function (productsFactory, cartFactory, $scope) {
     //VARS
     this.searchInput = "";
     //this.selectedProduct = null;
-
+    this.scope = $scope;
     this.orderBy = [
         {
             name: "цене",
@@ -36,6 +36,18 @@ app.controller('productsCtrl', function (productsFactory, cartFactory, $scope) {
 app.filter('moneyFilter', function(){
     return function (str) {
         return "$"+str+".00";
+    }
+});
+
+app.filter('searchKeyUnderline', function () {
+    return function (str, searchResult) {
+        var regexp = new RegExp(searchResult.toLowerCase());
+        if (searchResult != "") {
+            return str.toLowerCase()
+                .replace(regexp, function (nstr) {
+                return "<strong>" + nstr + "</strong>";
+            });
+        } else return str;
     }
 });
 

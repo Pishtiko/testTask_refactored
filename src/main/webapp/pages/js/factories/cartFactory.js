@@ -60,7 +60,6 @@ app.factory('cartFactory', ['$http', '$rootScope', function ($http) {
     service.saveCart = function () {
         $http.post(URL.SAVE, products)
             .success(function (response) {
-                console.log(products);
                 console.log(response);
                 service.updateProducts();
                 alert("Сохранено");

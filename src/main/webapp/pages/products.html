@@ -1,63 +1,63 @@
-
 <div class="row">
     <section class="content">
         <div class="search-field">
-        <h1>Каталог товаров</h1>
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="pull-right">
+            <h1>Каталог товаров</h1>
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="pull-right">
 
-                        <form ng-submit='productsCtrl.find()'>
-                            <a>Показаны {{searchResult | searchResultFilter}}</a>
-                            <button type="button" class="btn btn-success " ng-click="productsCtrl.find()">Поиск</button>
-                            <input type='text' title = "поиск"
-                                   ng-model='productsCtrl.searchInput'>
+                            <form ng-submit='productsCtrl.find()'>
+                                <a>Показаны {{searchResult | searchResultFilter}}</a>
+                                <button type="button" class="btn btn-success " ng-click="productsCtrl.find()">Поиск
+                                </button>
+                                <input type='text' title="поиск"
+                                       ng-model='productsCtrl.searchInput'>
 
-                            <select class='select-list'
-                                    ng-model="ord"
-                                    ng-options="list.id as list.listName for list in listsCtrl.lists">
-                                <option value="">сортировать по</option>
-                            </select>
-                            <select class='select-list'
-                                    ng-model="ord"
-                                    ng-options="ord.value as ord.name for ord in productsCtrl.orderBy">
-                                <option value="">сортировать по</option>
-                            </select>
-                        </form>
-                        <!--<button type="button" class="btn btn-success ">Отфильтровать</button>-->
+                                <select class='select-list'
+                                        ng-model="ord"
+                                        ng-options="list.id as list.listName for list in listsCtrl.lists">
+                                    <option value="">сортировать по</option>
+                                </select>
+                                <select class='select-list'
+                                        ng-model="ord"
+                                        ng-options="ord.value as ord.name for ord in productsCtrl.orderBy">
+                                    <option value="">сортировать по</option>
+                                </select>
+                            </form>
+                            <!--<button type="button" class="btn btn-success ">Отфильтровать</button>-->
 
-                        <!--<button type="button" class="btn btn-success " ng-click="productsCtrl.addToCart()">Добавить в корзину</button>-->
-                    </div>
-                    <div class="table-container">
-                        <table class="table table-filter" style= "overflow: scroll">
-                            <thead>
-                            <tr>
-                                <th ng-click="mainCtrl.setSortType('productName')">Товар</th>
-                                <th ng-click="mainCtrl.setSortType('description')">Описание</th>
-                                <th ng-click="mainCtrl.setSortType('price')">Стоимомть</th>
-                            </tr>
-                            </thead>
-                            <tbody class="carousel">
+                            <!--<button type="button" class="btn btn-success " ng-click="productsCtrl.addToCart()">Добавить в корзину</button>-->
+                        </div>
+                        <div class="table-container">
+                            <table class="table table-filter" style="overflow: scroll">
+                                <thead>
+                                <tr>
+                                    <th ng-click="mainCtrl.setSortType('productName')">Товар</th>
+                                    <th ng-click="mainCtrl.setSortType('description')">Описание</th>
+                                    <th ng-click="mainCtrl.setSortType('price')">Стоимомть</th>
+                                </tr>
+                                </thead>
+                                <tbody class="carousel">
 
-                            <tr data-status="pendiente"
-                                ng-repeat="product in productsCtrl.products() | orderBy:ord:sortReverse">
-                                <td>
-                                    <div class="ckbox">
-                                        <input type="checkbox" id="checkbox3">
-                                        <label for="checkbox3"></label>
-                                        <a>{{product.productName}}</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <a href="javascript:;" class="star">
-                                        <a>{{product.description}}</a>
-                                    </a>
-                                </td>
-                                <td>
-                                    <div class="media">
+                                <tr data-status="pendiente"
+                                    ng-repeat="product in productsCtrl.products() | orderBy:ord:sortReverse">
+                                    <td>
+                                        <div class="ckbox">
+                                            <input type="checkbox" id="checkbox3">
+                                            <label for="checkbox3"></label>
+                                            <a>{{product.productName | searchKeyUnderline: searchResult}}</a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" class="star">
+                                            <a>{{product.description | searchKeyUnderline: searchResult}}</a>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div class="media">
 
-                                        <div class="media-body">
+                                            <div class="media-body">
                                             <span class="media-meta pull-right">
                                                 <a href="#" class="pull-left"
                                                    ng-click="productsCtrl.addToCart(product)">
@@ -65,17 +65,18 @@
                                                          class="media-photo">
                                                 </a>
                                             </span>
-                                            <h4 class="title">
-                                                {{product.price | moneyFilter}}
-                                            </h4>
-                                            <!--<p class="summary">{{orderProduct.productId.price}}*{{orderProduct.count}}={{orderProduct.count*orderProduct.productId.price}} $</p>-->
+                                                <h4 class="title">
+                                                    {{product.price | moneyFilter}}
+                                                </h4>
+                                                <!--<p class="summary">{{orderProduct.productId.price}}*{{orderProduct.count}}={{orderProduct.count*orderProduct.productId.price}} $</p>-->
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
