@@ -100,7 +100,7 @@ public class RestControllerForCustomer {
         return customerDao.orderDetails(orderId);
     }
 
-    @RequestMapping( value = "/makeOrder", method = RequestMethod.GET)
+    @RequestMapping( value = "/makeOrder", method = RequestMethod.POST)
     @ResponseBody
     public boolean makeOrder() {
         return customerDao.makeOrder();
