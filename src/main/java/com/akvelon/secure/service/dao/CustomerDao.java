@@ -64,7 +64,7 @@ public class CustomerDao {
     public List<Product> findProductsByNameOrDescription(String searchKey, ORD order)
     {
         List<Product> products = null;
-        final String query = "FROM Product WHERE productName LIKE :SEARCHKEY OR description LIKE" + " :SEARCHKEY"+ " ORDER BY productName "+order.name();
+        final String query = "FROM Product WHERE productName OR description LIKE" + " :SEARCHKEY"+ " ORDER BY productName "+order.name();
         products = (List<Product>) entityManager
                 .createQuery(query)
                 .setParameter("SEARCHKEY","%" + searchKey + "%")

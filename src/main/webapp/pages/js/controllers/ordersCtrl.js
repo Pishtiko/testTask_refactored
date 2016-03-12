@@ -33,8 +33,12 @@ app.controller('ordersCtrl', function($scope, ordersFactory){
         this.currentOrder.status = 'CONFIRMED';
     };
     this.cancel = function(){
-        ordersFactory.cancel(this.currentOrder);
-        this.currentOrder = 'CANCELED';
+        ordersFactory.cancel(this.currentOrder)
+            .success(function () {
+                ordersFactory.updateOrders();
+            });
+        this.currentOrder.status = 'CANCELLED';
+
     };
     this.backButtonHandler = function(){
         $scope.detailsShown = false;

@@ -30,8 +30,6 @@
     <%--controllers--%>
     <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/controllers/mainCtrl.js"></script>
     <script type="text/javascript"
-            src="${pageContext.request.contextPath}/pages/js/controllers/testController.js"></script>
-    <script type="text/javascript"
             src="${pageContext.request.contextPath}/pages/js/controllers/productCtrl.js"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath}/pages/js/controllers/productsCtrl.js"></script>
@@ -40,7 +38,6 @@
 
 
     <%--factories--%>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/factories/testFactory.js"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath}/pages/js/factories/productFactory.js"></script>
     <script type="text/javascript"

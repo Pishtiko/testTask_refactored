@@ -18,7 +18,13 @@ app.factory('ordersFactory', function ($http, $rootScope) {
     };
     (service.updateOrders = function () {
         request.success(function (response) {
-            orders = response;
+            for (var i = orders.length - 1; i >= 0; i--) {
+                delete orders[i];
+            }
+            orders = [];
+            for (var i =0; i < response.length; i++) {
+                orders.push(response[i]);
+            }
             console.log(orders);
         });
     });
@@ -32,10 +38,7 @@ app.factory('ordersFactory', function ($http, $rootScope) {
             });
     };
     service.cancel = function (order) {
-        $http.post(URL.CANCEL+order.idd, null)
-            .success(function () {
-                alert("Заказ отменен");
-            });
+        return $http.post(URL.CANCEL+order.idd, null);
     };
     service.getOrders = function () {
         return orders;

@@ -98,9 +98,9 @@ public class RestControllerForEmployee {
     public boolean cancelOrder(@PathVariable int orderId)
     {
         boolean hasErrors = false;
-        OrderEntity order = oeDao.getById(orderId);
+        OrderEntity order = dao.getOrderEntityById(orderId);
         order.setStatus(OrderStatus.CANCELLED);
-        oeDao.saveOrUpdate(order);
+        oeDao.persistEntity(order);
         return hasErrors;
     }
 

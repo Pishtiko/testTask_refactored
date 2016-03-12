@@ -1,4 +1,4 @@
-app.factory('cartFactory', ['$http', '$rootScope', function ($http) {
+app.factory('cartFactory', ['$http', '$rootScope', 'ordersFactory', function ($http, ordersFactory) {
 
     var cartId = {};
 
@@ -106,6 +106,7 @@ app.factory('cartFactory', ['$http', '$rootScope', function ($http) {
         $http.get(URL.ORDER)
             .success(function (response) {
                 products = [];
+                service.updateProducts();
             })
             .error(function (msg) {
                 console.log(msg);
