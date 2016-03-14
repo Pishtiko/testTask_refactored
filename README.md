@@ -27,5 +27,7 @@ https://drive.google.com/folderview?id=0Bye2GvHai26DaEk1Tks5UlBJM0U&usp=sharing
 
 ### then run next docker commands:
    docker build -t testtask .
-   docker run -it -p 8087:8080 testtask bin\bash
+   docker run -it -p 80:8080 testtask bin\bash
 
+### after that application will be available on next path:
+{your-docker-machine-ip}/secure
