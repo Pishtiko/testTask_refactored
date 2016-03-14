@@ -29,8 +29,8 @@
 
                             <!--<button type="button" class="btn btn-success " ng-click="productsCtrl.addToCart()">Добавить в корзину</button>-->
                         </div>
-                        <div class="table-container" style="height: 600px">
-                            <table class="table table-filter" style="width: 100%; height: 100%; display:block; overflow: scroll">
+                        <div class="table-container" >
+                            <table class="table table-filter" >
                                 <thead>
                                 <tr>
                                     <th ng-click="mainCtrl.setSortType('productName')">Товар</th>
@@ -38,10 +38,10 @@
                                     <th ng-click="mainCtrl.setSortType('price')">Стоимомть</th>
                                 </tr>
                                 </thead>
-                                <tbody class="carousel" style="width: 100%; display:block;">
+                                <tbody class="carousel" >
 
-                                <tr data-status="pendiente"
-                                    ng-repeat="product in productsCtrl.products() | orderBy:ord:sortReverse">
+                                <tr
+                                    ng-repeat="product in productsCtrl.products() | orderBy:ord:sortReverse track by product.productId ">
                                     <td>
                                         <div class="ckbox">
                                             <input type="checkbox" id="checkbox3">

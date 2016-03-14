@@ -1,4 +1,4 @@
-app.factory('cartFactory', ['$http', '$rootScope', 'ordersFactory', function ($http, ordersFactory) {
+app.factory('cartFactory', ['$http', '$rootScope', function ($http, ordersFactory) {
 
     var cartId = {};
 
@@ -32,30 +32,32 @@ app.factory('cartFactory', ['$http', '$rootScope', 'ordersFactory', function ($h
 
     $http.get(URL.GET).success(function (response) {
         products = response;
-        service.scope.cartProducts = response;
+        //service.scope.cartProducts = response;
         isReady = true;
         console.log(products);
     });
 
-    (service.updateProducts = function () {
+    service.updateProducts = function () {
 
         console.log("updating");
         request.success(function (response) {
             for (var i = products.length - 1; i >= 0; i--) {
                 products.remove(i);
             }
-            response.forEach(function(index, op){
-                products.push(op);
-            });
+            products =[];
             //products = response;
-            service.scope.cartProducts = response;
+            for (var i =0; i < response.length; i++) {
+                products.push(response[i]);
+            }
+            //service.scope.cartProducts = response;
             console.log("updated");
         }).error(function () {
             console.log(error);
         });
-    });
+    };
 
     (service.updateProducts());
+
 
     service.saveCart = function () {
         $http.post(URL.SAVE, products)
@@ -69,25 +71,31 @@ app.factory('cartFactory', ['$http', '$rootScope', 'ordersFactory', function ($h
             });
     };
     service.addToCart = function (product) {
-        $http.post(URL.PUT + product.productId + "/" + 1, null)
-            .success(function (response) {
-                console.log(response);
-                alert("Добавлено в корзину");
-                products.push({
-                    count: 1,
-                    idd: cartId,
-                    orderId: response,
-                    productId: product
+        if (_.filter(products, {productId: product}).length===0){
+            $http.post(URL.PUT + product.productId + "/" + 1, null)
+                .success(function (response) {
+                    console.log(response);
+                    alert("Добавлено в корзину");
+                    products.push({
+                        count: 1,
+                        idd: cartId,
+                        orderId: response,
+                        productId: product
+                    });
+                })
+                .error(function (msg) {
+                    alert("ошибка");
+                    console.log(msg);
                 });
-            })
-            .error(function (msg) {
-                alert("ошибка");
-                console.log(msg);
-            });
+        }else {
+            alert("Товар уже в корзине");
+        }
+
     };
     service.removeFromCart = function (orderProduct) {
         $http.get(URL.DELETE + orderProduct.orderId)
             .success(function (response) {
+                console.log(response);
                 service.scope.cartProducts = products;
                 alert("удалено");
                 _.pull(products, orderProduct);
@@ -99,21 +107,26 @@ app.factory('cartFactory', ['$http', '$rootScope', 'ordersFactory', function ($h
 
     service.getProducts = function () {
         //service.updateProducts();
-        service.scope.cartProducts = products;
+        //products = service.scope.cartProducts;
         return products;
     };
     service.makeOrder = function () {
-        $http.get(URL.ORDER)
-            .success(function (response) {
+        $http.post(URL.ORDER, null)
+            .success(function () {
                 products = [];
-                service.updateProducts();
             })
             .error(function (msg) {
                 console.log(msg);
             });
     };
     service.cleanTheCart = function () {
-
+        $http.post(URL.CLEAN, null)
+            .success(function () {
+                alert("Товары удалены из корзины");
+            })
+            .error(function(msg){
+                console.log(msg);
+            })
     };
 
 

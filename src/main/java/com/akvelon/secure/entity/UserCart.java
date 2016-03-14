@@ -42,6 +42,7 @@ public class UserCart implements Serializable {
     }
 
 
+/*
     @Override
     public int hashCode() {
         return userName.hashCode();
@@ -51,4 +52,6 @@ public class UserCart implements Serializable {
     public boolean equals(Object obj) {
         return userName.equals(obj);
     }
+    */
 }
+

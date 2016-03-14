@@ -1,4 +1,4 @@
-app.controller('cartCtrl', function($scope, cartFactory, ordersFactory){
+app.controller('cartCtrl', function($scope, cartFactory){
 
     cartFactory.injectScope($scope);
     cartFactory.updateProducts();
@@ -9,7 +9,6 @@ app.controller('cartCtrl', function($scope, cartFactory, ordersFactory){
 
     this.makeOrder = function(){
         cartFactory.makeOrder();
-        ordersFactory.updateOrders();
     };
     this.removeFromCart = function (product) {
         cartFactory.removeFromCart(product);
@@ -20,6 +19,6 @@ app.controller('cartCtrl', function($scope, cartFactory, ordersFactory){
     };
     this.updateProducts = function () {
         return cartFactory.updateProducts();
-        //$scope.$apply();
+        $scope.$apply();
     }
 });

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class CustomerDao {
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -28,27 +29,25 @@ public class CustomerDao {
 
     @Transactional
     public List<Product> getProductListByParam(String op) {
-        System.out.println("А здеся?");
-        List<Product> products = entityManager.createQuery("from Product order by " + op).getResultList();
 
         return entityManager.createQuery("from Product order by " + op).getResultList();
     }
 
     @Transactional
     public List<Product> getProductListByParamDesc(String op) {
-        System.out.println("А здеся?");
-        List<Product> products = entityManager.createQuery("from Product order by " + op + " desc").getResultList();
-
-        return products;
+        return entityManager.createQuery("from Product order by " + op + " desc").getResultList();
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
+
     public Product getProductById(int id){
         return entityManager.find(Product.class, id);
     }
 
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<Product> findProductsByName(String searchKey, ORD order)
     {
         List<Product> products = null;
@@ -61,6 +60,7 @@ public class CustomerDao {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<Product> findProductsByNameOrDescription(String searchKey, ORD order)
     {
         List<Product> products = null;
@@ -80,7 +80,7 @@ public class CustomerDao {
     public UserCart getCart(String username) {
         User user = entityManager.find(User.class, username);
         UserCart uc = new UserCart(user, null);
-        UserCart userCart = entityManager.find(UserCart.class, uc);
+        UserCart userCart = entityManager.find(UserCart.class, username);
         if(userCart.getOrderId()==null){
             OrderEntity orderEntity = new OrderEntity();
             entityManager.persist(orderEntity);
@@ -93,6 +93,7 @@ public class CustomerDao {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<OrderProduct> getCartContent(String username) {
         UserCart uCart = entityManager.find(UserCart.class, username);
         if(uCart==null){
@@ -155,6 +156,7 @@ public class CustomerDao {
             }
 
         }catch (Exception e){
+            hasErrors = true;
             System.out.println(e+" while removing from the cart");
         }
         return hasErrors;
@@ -206,12 +208,14 @@ public class CustomerDao {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<OrderProduct> getOrderById(int orderId) {
         String query = "FROM OrderProduct op WHERE op.idd.idd = :orderId";
         return entityManager.createQuery(query).setParameter("orderId",orderId).getResultList();
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<OrderEntity> getOrderList() {
         List<OrderEntity> orders = null;
         orders = (List<OrderEntity>) entityManager
@@ -220,6 +224,7 @@ public class CustomerDao {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<OrderEntity> getOrdersOfCustomer(String userName) {
         List<OrderEntity> orders;
         String query = "SELECT oe FROM OrderEntity oe WHERE oe.userId.login = :userName";
@@ -244,6 +249,7 @@ public class CustomerDao {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<OrderEntity> getOrdersOrderedByParamDesc(String selectParam, String value) {
         List<OrderEntity> orders = null;
         String query = "FROM OrderEntity WHERE " + selectParam + "= :" + selectParam + " desc";
@@ -261,6 +267,7 @@ public class CustomerDao {
 
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<OrderProduct> orderDetails(int orderId) {
         final String queryOp = "SELECT op FROM OrderProduct op WHERE op.idd.idd = :orderId";
         List<OrderProduct> ops = entityManager.createQuery(queryOp)

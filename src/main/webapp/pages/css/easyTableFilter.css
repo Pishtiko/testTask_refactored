@@ -34,7 +34,20 @@ body {
 .table-filter {
     background-color: #fff;
     border-bottom: 1px solid #eee;
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: scroll
 }
+/**/
+.table-container {
+    height: 600px;
+}
+.table-filter tbody {
+    width: 800px;
+    display:block;
+}
+/**/
 .table-filter tbody tr:hover {
     cursor: pointer;
     background-color: #eee;
