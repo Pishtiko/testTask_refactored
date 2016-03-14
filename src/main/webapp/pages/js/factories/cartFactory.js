@@ -28,7 +28,7 @@ app.factory('cartFactory', ['$http', '$rootScope', function ($http, ordersFactor
         .error(function (msg) {
             console.log(msg);
         });
-    var request = $http.get(URL.GET);
+    //var request = $http.get(URL.GET);
 
     $http.get(URL.GET).success(function (response) {
         products = response;
@@ -40,16 +40,17 @@ app.factory('cartFactory', ['$http', '$rootScope', function ($http, ordersFactor
     service.updateProducts = function () {
 
         console.log("updating");
-        request.success(function (response) {
+        $http.get(URL.GET).success(function (response) {
             for (var i = products.length - 1; i >= 0; i--) {
-                products.remove(i);
+                products.splice(i);
             }
             products =[];
             //products = response;
             for (var i =0; i < response.length; i++) {
                 products.push(response[i]);
             }
-            //service.scope.cartProducts = response;
+            products = response;
+            service.scope.cartProducts = response;
             console.log("updated");
         }).error(function () {
             console.log(error);
@@ -111,13 +112,7 @@ app.factory('cartFactory', ['$http', '$rootScope', function ($http, ordersFactor
         return products;
     };
     service.makeOrder = function () {
-        $http.post(URL.ORDER, null)
-            .success(function () {
-                products = [];
-            })
-            .error(function (msg) {
-                console.log(msg);
-            });
+        return $http.post(URL.ORDER, null);
     };
     service.cleanTheCart = function () {
         $http.post(URL.CLEAN, null)

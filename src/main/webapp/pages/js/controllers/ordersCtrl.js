@@ -5,11 +5,6 @@ app.controller('ordersCtrl', function($scope, ordersFactory){
     $scope.currentOrder = {};
     (ordersFactory.injectScope($scope));
 
-    this.renderDetails = function(){
-        $scope.detailsShown = true;
-        //oldTableContent = table.html();
-        //table.html("<div order-details></div>");
-    };
     this.getMyOrders = function(){
         return ordersFactory.getOrders();
     };

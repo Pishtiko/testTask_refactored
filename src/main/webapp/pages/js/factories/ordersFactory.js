@@ -10,24 +10,27 @@ app.factory('ordersFactory', function ($http, $rootScope) {
     var oProducts = [];
     var service = {};
     var orders = [];
-    var request = $http.get(URL.GET);
 
+    $http.get(URL.GET).success(function (response) {
+        orders = response;
+    });
 
     service.injectScope = function (iScope) {
         scope = iScope;
     };
-    (service.updateOrders = function () {
-        request.success(function (response) {
+    service.updateOrders = function () {
+        $http.get(URL.GET).success(function (response) {
             for (var i = orders.length - 1; i >= 0; i--) {
-                delete orders[i];
+                orders.splice(i);
             }
             orders = [];
             for (var i =0; i < response.length; i++) {
                 orders.push(response[i]);
             }
+            orders = response;
             console.log(orders);
         });
-    });
+    };
     scope.oProducts = [];
 
     service.updateOrders();
