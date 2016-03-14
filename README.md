@@ -30,4 +30,4 @@ https://drive.google.com/folderview?id=0Bye2GvHai26DaEk1Tks5UlBJM0U&usp=sharing
    docker run -it -p 80:8080 testtask bin\bash
 
 ### after that application will be available on next path:
-{your-docker-machine-ip}/secure
+{your-docker-machine-ip}/secure-exam
