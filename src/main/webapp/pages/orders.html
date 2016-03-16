@@ -1,5 +1,5 @@
 <div class="row">
-    <section class="content">
+    <section ng-controller="ordersCtrl as ordersCtrl" class="content">
         <h1>Заказы</h1>
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
@@ -14,6 +14,11 @@
                             </div>
                         </div>
                         <div class="btn-group" ng-if="detailsShown">
+                            <button ng-if="pagePart=='myOrders'" type="button" class="btn btn-warning" ng-click="ordersCtrl.backButtonHandler()">
+                                К заказам
+                            </button>
+                        </div>
+                        <div class="btn-group" ng-if="detailsShown && pagePart=='orders'">
                             <button ng-if="ordersCtrl.currentOrder.status == 'UNCONFIRMED'" type="button"
                                     class="btn btn-success" ng-click="ordersCtrl.confirmOrder()">
                                 Подтвердить
@@ -69,7 +74,7 @@
 
 
                             </tbody>
-                            <tbody ng-if="!detailsShown">
+                            <tbody ng-if="!detailsShown && pagePart=='myOrders'">
                             <tr ng-repeat="order in ordersCtrl.getMyOrders() | isStatus: showWithStatus"
                                 ng-click="ordersCtrl.getOrderDetails(order)"
                             >
@@ -101,7 +106,40 @@
                                     </div>
                                 </td>
                             </tr>
-
+                            </tbody>
+                            <tbody ng-if="!detailsShown && pagePart=='orders'">
+                            <tr ng-if="pagePart=='orders'" ng-repeat="orderchik in ordersCtrl.getAllOrders() | isStatus: showWithStatus"
+                                ng-click="ordersCtrl.getOrderDetails(orderchik)"
+                            >
+                                <td>
+                                    <div class="userName">
+                                        <a>{{orderchik.userId.login}}</a>
+                                        <!--<input type="checkbox" id="checkbox1">-->
+                                        <!--<label for="checkbox1"></label>-->
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="javascript:;" class="star">
+                                        <h4>{{orderchik.status | statusFilter}}</h4>
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="media">
+                                        <a href="#" class="pull-left">
+                                            <img src="pages/resource/cart.png"
+                                                 class="media-photo">
+                                        </a>
+                                        <div class="media-body">
+                                            <span class="media-meta pull-right">{{orderchik.createDate | dateFilter}}</span>
+                                            <h4 class="title">
+                                                {{orderchik.idd}}
+                                                <span class="pull-right pagado"><a></a></span>
+                                            </h4>
+                                            <p class="summary">{{orderchik.createDate | dateFilter}}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
 
                             </tbody>
                         </table>

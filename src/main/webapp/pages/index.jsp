@@ -35,16 +35,16 @@
             src="${pageContext.request.contextPath}/pages/js/controllers/productsCtrl.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/controllers/ordersCtrl.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/controllers/cartCtrl.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/controllers/usersCtrl.js"></script>
 
 
     <%--factories--%>
-    <script type="text/javascript"
-            src="${pageContext.request.contextPath}/pages/js/factories/productFactory.js"></script>
-    <script type="text/javascript"
-            src="${pageContext.request.contextPath}/pages/js/factories/productsFactory.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/factories/productFactory.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/factories/productsFactory.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/factories/cartFactory.js"></script>
-    <script type="text/javascript"
-            src="${pageContext.request.contextPath}/pages/js/factories/ordersFactory.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/factories/ordersFactory.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/factories/usersFactory.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/pages/js/factories/allOrdersFactory.js"></script>
 
 
     <%--derictives--%>
@@ -54,6 +54,8 @@
             src="${pageContext.request.contextPath}/pages/js/directives/cartDirective.js"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath}/pages/js/directives/ordersDirective.js"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/pages/js/directives/adminPage.js"></script>
 
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -81,9 +83,22 @@
         <a class="btn btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a>
             <%--<sec:authorize access="hasRole('ROLE_CUSTOMER')">--%>
         <div class="btn-group">
-            <button type="button" class="btn btn-success" ng-click="mainCtrl.setPage('catalogue')">Каталог</button>
-            <button type="button" class="btn btn-success" ng-click="mainCtrl.setPage('cart')">Корзина</button>
-            <button type="button" class="btn btn-success" ng-click="mainCtrl.setPage('myOrders')">Мои заказы</button>
+            <sec:authorize access="hasAnyRole({'ROLE_CUSTOMER', 'ROLE_EMPLOYEE'})">
+                <button type="button" class="btn btn-success" ng-click="mainCtrl.setPage('catalogue')">Каталог</button>
+            </sec:authorize>
+            <sec:authorize access="hasRole('ROLE_CUSTOMER')">
+                <button type="button" class="btn btn-success" ng-click="mainCtrl.setPage('cart')">Корзина</button>
+            </sec:authorize>
+            <sec:authorize access="hasRole('ROLE_CUSTOMER')">
+                <button type="button" class="btn btn-success" ng-click="mainCtrl.setPage('myOrders')">Мои заказы</button>
+            </sec:authorize>
+            <sec:authorize access="hasRole('ROLE_EMPLOYEE')">
+                <button type="button" class="btn btn-success" ng-click="mainCtrl.setPage('orders')">Заказы</button>
+            </sec:authorize>
+            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <button type="button" class="btn btn-success" ng-click="mainCtrl.setPage('admin')">Управление пользователями</button>
+            </sec:authorize>
+
         </div>
         <a style="margin-right: auto"><h1>Ваш логин: <sec:authentication property="principal.username"/></h1></a>
     </div>
@@ -99,13 +114,19 @@
         <div ng-if="pagePart==='cart'">
             <div cart-directive></div>
         </div>
-        <div ng-if="pagePart==='myOrders'">
+        <div ng-if="pagePart==='myOrders' || pagePart==='orders' ">
             <div ng-controller="ordersCtrl as ordersCtrl" orders-directive></div>
+        </div>
+        <div ng-if="pagePart==='admin'">
+            <div ng-controller="usersCtrl as usersCtrl" admin-page></div>
         </div>
 
     </div>
 </sec:authorize>
-<sec:authorize access="isAuthenticated()">
+<sec:authorize access="hasRole('ROLE_ADMIN')">
+    <h1>Админян?</h1>
+</sec:authorize>
+<sec:authorize access="hasAnyRole({'ROLE_ADMIN', 'ROLE_EMPLOYEE'})">
     <div class="row chart">
         <section class="content">
             <div class="col-md-8 col-md-offset-2">

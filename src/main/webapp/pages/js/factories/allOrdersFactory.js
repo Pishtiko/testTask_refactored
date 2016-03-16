@@ -1,7 +1,6 @@
-app.factory('ordersFactory', function ($http) {
+app.factory('allOrdersFactory', function ($http) {
 
     var URL = {
-        GET: "main/getMyOrders",
         GET_ALL: "service/getOrderList",
         GET_DETAILS: "main/orderDetails/",
         CONFIRM:"service/confirmOrder/",
@@ -10,47 +9,52 @@ app.factory('ordersFactory', function ($http) {
     var scope = {};
     var oProducts = [];
     var service = {};
-    var orders = [];
     var allOrders = [];
 
-    $http.get(URL.GET).success(function (response) {
-        orders = response;
-    });
+    $http.get(URL.GET_ALL).success(function (response) {
+            console.log(response);
+            allOrders = response;
+        })
+        .error(function (msg) {
+            console.log(msg)
+        });
 
     service.injectScope = function (iScope) {
         scope = iScope;
     };
-    service.updateOrders = function () {
-        $http.get(URL.GET).success(function (response) {
-            for (var i = orders.length - 1; i >= 0; i--) {
-                orders.splice(i);
-            }
-            orders = [];
-            for (var i =0; i < response.length; i++) {
-                orders.push(response[i]);
-            }
-            orders = response;
-            console.log(orders);
-        });
-    };
 
+    service.updateAll =function(){
+        $http.get(URL.GET_ALL).success(function (response) {
+                for (var i = allOrders.length - 1; i >= 0; i--) {
+                    allOrders.splice(i);
+                }
+                allOrders = [];
+                for (var i =0; i < response.length; i++) {
+                    allOrders.push(response[i]);
+                }
+                allOrders = response;
+            })
+            .error(function(msg){
+                console.log(msg);
+            });
+    };
     scope.oProducts = [];
 
-    service.updateOrders();
-    //
-    //service.confirmOrder = function (order) {
-    //    $http.post(URL.CONFIRM+order.idd, null)
-    //        .success(function () {
-    //            alert("Заказ подтаержден");
-    //        });
-    ////};
-    //service.cancel = function (order) {
-    //    return $http.post(URL.CANCEL+order.idd, null);
-    //};
-    service.getOrders = function () {
-        return orders;
+    service.updateAll();
+
+    service.confirmOrder = function (order) {
+        $http.post(URL.CONFIRM+order.idd, null)
+            .success(function () {
+                alert("Заказ подтаержден");
+            });
+    };
+    service.cancel = function (order) {
+        return $http.post(URL.CANCEL+order.idd, null);
     };
 
+    service.getAllOrders = function(){
+        return allOrders;
+    };
     service.getOrderDetails = function (order) {
         console.log("updating details");
         $http.get(URL.GET_DETAILS + order.idd)

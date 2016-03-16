@@ -1,4 +1,4 @@
-app.factory('cartFactory', ['$http', '$rootScope', function ($http, ordersFactory) {
+app.factory('cartFactory', ['$http', '$rootScope', function ($http) {
 
     var cartId = {};
 
@@ -28,7 +28,6 @@ app.factory('cartFactory', ['$http', '$rootScope', function ($http, ordersFactor
         .error(function (msg) {
             console.log(msg);
         });
-    //var request = $http.get(URL.GET);
 
     $http.get(URL.GET).success(function (response) {
         products = response;

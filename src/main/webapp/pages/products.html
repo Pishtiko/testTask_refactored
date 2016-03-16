@@ -43,9 +43,7 @@
                                 <tr
                                     ng-repeat="product in productsCtrl.products() | orderBy:ord:sortReverse track by product.productId ">
                                     <td>
-                                        <div class="ckbox">
-                                            <input type="checkbox" id="checkbox3">
-                                            <label for="checkbox3"></label>
+                                        <div class="pName">
                                             <a>{{product.productName | searchKeyUnderline: searchResult}}</a>
                                         </div>
                                     </td>

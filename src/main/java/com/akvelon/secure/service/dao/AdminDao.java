@@ -117,4 +117,9 @@ public class AdminDao {
         return hasErrors;
     }
 
+    @Transactional
+    @SuppressWarnings("unchecked")
+    public List<UserRole> getRoles() {
+        return entityManager.createQuery("FROM UserRole").getResultList();
+    }
 }

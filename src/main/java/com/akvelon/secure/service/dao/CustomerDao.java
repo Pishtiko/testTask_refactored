@@ -80,7 +80,7 @@ public class CustomerDao {
     public UserCart getCart(String username) {
         User user = entityManager.find(User.class, username);
         UserCart uc = new UserCart(user, null);
-        UserCart userCart = entityManager.find(UserCart.class, username);
+        UserCart userCart = entityManager.find(UserCart.class, uc);
         if(userCart.getOrderId()==null){
             OrderEntity orderEntity = new OrderEntity();
             entityManager.persist(orderEntity);
@@ -218,8 +218,10 @@ public class CustomerDao {
     @SuppressWarnings("unchecked")
     public List<OrderEntity> getOrderList() {
         List<OrderEntity> orders = null;
-        orders = (List<OrderEntity>) entityManager
-                .createQuery("FROM OrderEntity").getResultList();
+        String query = "FROM OrderEntity";
+        orders = entityManager
+                .createQuery(query)
+                .getResultList();
         return orders;
     }
 

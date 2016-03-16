@@ -1,15 +1,20 @@
-app.controller('ordersCtrl', function($scope, ordersFactory){
+app.controller('ordersCtrl', function($scope, ordersFactory, allOrdersFactory){
+
 
     var table = $('#orders-table');
     this.currentOrder = {};
     $scope.currentOrder = {};
-    (ordersFactory.injectScope($scope));
+    ordersFactory.injectScope($scope);
+    allOrdersFactory.injectScope($scope);
 
     this.getMyOrders = function(){
         return ordersFactory.getOrders();
     };
     this.getAllOrders = function () {
-        return ordersFactory.getAllOrders();
+        return allOrdersFactory.getAllOrders();
+    };
+    this.getDetails = function() {
+        return $scope.oProducts;
     };
     this.getOrderDetails = function (order) {
         this.currentOrder = order;
@@ -18,17 +23,15 @@ app.controller('ordersCtrl', function($scope, ordersFactory){
         //this.renderDetails();
         ordersFactory.getOrderDetails(order);
     };
-    this.getDetails = function() {
-        return $scope.oProducts;
-    };
+
 
     //Button Handlers
     this.confirmOrder = function(){
-        ordersFactory.confirmOrder(this.currentOrder);
+        allOrdersFactory.confirmOrder(this.currentOrder);
         this.currentOrder.status = 'CONFIRMED';
     };
     this.cancel = function(){
-        ordersFactory.cancel(this.currentOrder)
+        allOrdersFactory.cancel(this.currentOrder)
             .success(function () {
                 ordersFactory.updateOrders();
             });

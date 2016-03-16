@@ -1,0 +1,57 @@
+
+<div class="container" ng-controller="usersCtrl as usersCtrl">
+    <form ng-submit="usersCtrl.addUser()">
+        <h2 class="form-signin-heading">Создать учетную запись</h2>
+        <input type="text" ng-model="usersCtrl.newUser.login"  class="form-control" >
+        <select class='select-list form-control'
+                ng-model="usersCtrl.newUsersRole"
+                ng-options="role.value as role.name for role in usersCtrl.ROLES">
+            <option value="">роль</option>
+        </select>
+        <input ng-model="usersCtrl.newUser.password" type="password" class="form-control" name="j_password" placeholder="Password" >
+        <input ng-model="usersCtrl.confirmPassword" type="password" class="form-control" name="j_password" placeholder="Password">
+        <button ng-click="usersCtrl.createUser()" class="btn btn-lg btn-primary btn-block" type="submit">Создать уч. запись</button>
+    </form>
+    <div class="table-container">
+        <table class="table table-filter" style="overflow: scroll">
+            <thead>
+            <tr>
+                <th ng-click="mainCtrl.setSortType('userName')">Пользователь</th>
+                <th ng-click="mainCtrl.setSortType('userRole')">Роль</th>
+            </tr>
+            </thead>
+            <tbody class="carousel">
+
+            <tr
+                ng-repeat="user in usersCtrl.getUsers() | orderBy:ord:sortReverse">
+                <td>
+                    <div class="uName">
+                        <a>{{user.login}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="uRole">
+                        <a>{{usersCtrl.getRole(user)}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="media">
+                        <div class="media-body">
+                                            <span class="media-meta pull-right">
+                                                <a href="#" class="pull-left"
+                                                   ng-click="usersCtrl.removeUser(user)">
+                                                    <img src="pages/resource/delete.png" title="Удалить учетную запись" class="media-photo">
+                                                </a>
+                                            </span>
+                            <h4 class="title">
+                            </h4>
+                            <!--<p class="summary">{{orderProduct.productId.price}}*{{orderProduct.count}}={{orderProduct.count*orderProduct.productId.price}} $</p>-->
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>

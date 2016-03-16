@@ -1,6 +1,7 @@
 package com.akvelon.secure.controller;
 
 import com.akvelon.secure.entity.User;
+import com.akvelon.secure.entity.UserRole;
 import com.akvelon.secure.service.dao.AdminDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -32,6 +33,12 @@ public class RestControllerForAdmin {
     public List<User> getUsers()
     {
         return adminDao.getUsers();
+    }
+
+    @RequestMapping (value = "/getRoles")
+    @ResponseBody
+    public List<UserRole> getRoles(){
+        return adminDao.getRoles();
     }
 
     //ISSUE
