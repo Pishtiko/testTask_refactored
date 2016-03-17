@@ -169,6 +169,13 @@
         </dependency>
 
     </dependencies>
+    <repositories>
+        <repository>
+            <id>in-project</id>
+            <name>In Project Repo</name>
+            <url>http://109.60.131.19:8388/</url>
+        </repository>
+    </repositories>
 
     <build>
         <finalName>secure-exam</finalName>
