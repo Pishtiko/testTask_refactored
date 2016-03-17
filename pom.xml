@@ -187,7 +187,9 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
+                    <failOnError>false</failOnError>
                 </configuration>
+                
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
