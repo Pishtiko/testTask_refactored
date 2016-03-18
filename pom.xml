@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>spring-security-exam</groupId>
-    <artifactId>spring-security-exam</artifactId>
+    <groupId>akvelon</groupId>
+    <artifactId>testTask</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
@@ -44,6 +44,7 @@
         </dependency>
 
         <!-- JSON Converter -->
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -178,7 +179,7 @@
     </repositories>
 
     <build>
-        <finalName>secure-exam</finalName>
+        <finalName>testTask</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

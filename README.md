@@ -2,7 +2,7 @@
 ### test task for Akvelon java junior developer
 
 ```
-REST API :  https://docs.google.com/spreadsheets/d/1yoaKXn4a7gsRR6OUdP91T9mS4IQ-IRfeyyzByf66VzA/edit?usp=sharing
+REST API Doc available by link :  https://docs.google.com/spreadsheets/d/1yoaKXn4a7gsRR6OUdP91T9mS4IQ-IRfeyyzByf66VzA/edit?usp=sharing
 ```
 
 ### notes:
@@ -14,22 +14,18 @@ Otherwise use SQL script and mdf file provided by link below:
 https://drive.google.com/folderview?id=0Bye2GvHai26DaEk1Tks5UlBJM0U&usp=sharing
 ```
 
-
-  ```
-  first add ".jar" to sqljdbc4 file's name in project's root folder
-  REN | RENAME sqljdbc4 sqljdbc4.jar
-  ```
 # Deployment:
-### To build and deploy perform commands in source folder:
+### To build war file for application server deployment perform commands in source folder:
 
     mvn install:install-file -Dfile=sqljdbc4.jar -DgroupId=com.microsoft.sqlserve4 -DartifactId=sqljdbc4 -Dversion=4.0 -Dpackaging=jar
     mvn package
 
 
-### then run next docker commands:
+### To deploy the project on Docker machine just run next commands in shell or boot2Docker Quickstart Terminal if you use Windows or Mac:
    docker build -t testtask .
-
    docker run -it -p 80:8080 testtask
 
+### Or just pull auto-refreshable image from docker hub: "docker pull arturd/testtask"
+
 ### after that application will be available on next path:
-{your-docker-machine-ip}/secure-exam
+{your-docker-machine-ip}/testTask
